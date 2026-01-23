@@ -2,11 +2,11 @@
 
 POOSD Group 6 Contact Sheet
 -----------------------------------------------------------------------
-|  Team Member  |  Project Role  |            email/number            | 
-| Evan Jania    | TBD            | evanjania@gmail.com / 386-451-2488 |
-|               |                |                                    |
-|               |                |                                    |
-|               |                |                                    |
-|               |                |                                    |
+|  Team Member   |  Project Role  |            email/number            | 
+| Evan Jania     | TBD            | evanjania@gmail.com / 386-451-2488 |
+| Logan Elkins   | TBD            | loganelkins0101@gmail.com          |
+| Kevin Estrada  | TBD            | kevinkevin2796@gmail.com           |
+| Siddanth Rajan | TBD            |                                    |
+| Erkan Altundal | TBD            | erkankerem532@gmail.com            |
 
   
