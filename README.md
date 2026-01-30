@@ -7,6 +7,6 @@ POOSD Group 6 Contact Sheet
 | Logan Elkins   | TBD            | loganelkins0101@gmail.com          |
 | Kevin Estrada  | TBD            | kevinkevin2796@gmail.com/407-953-6630|
 | Siddanth Rajan | TBD            |                                    |
-| Erkan Altundal | TBD            | erkankerem532@gmail.com            |
+| Erkan Altundal | API           | erkankerem532@gmail.com            |
 
   
