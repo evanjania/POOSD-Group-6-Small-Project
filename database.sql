@@ -1,6 +1,8 @@
 /*Kevin Estrada | Database | COP4331 small project*/
-CREATE DATABASE COP4331;
+CREATE DATABASE IF NOT EXISTS COP4331;
 USE COP4331;
+DROP TABLE IF EXISTS `COP4331`.`Contacts`;
+DROP TABLE IF EXISTS `COP4331`.`Users`;
 
 CREATE TABLE `COP4331`.`Users`
 (
@@ -10,9 +12,12 @@ CREATE TABLE `COP4331`.`Users`
   `Login` VARCHAR(100) NOT NULL DEFAULT '',
   `Password` VARCHAR(255) NOT NULL DEFAULT '',
   `DateCreated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `VaultNumber` INT NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE (`Login`)
 ) ENGINE = InnoDB;
+
+
 
 CREATE TABLE `COP4331`.`Contacts`
 (
@@ -30,3 +35,16 @@ CREATE TABLE `COP4331`.`Contacts`
     FOREIGN KEY (`UserID`) REFERENCES `Users`(`ID`)
     ON DELETE CASCADE -- deletes all contacts of a deleted user
 ) ENGINE = InnoDB;
+
+
+
+DELIMITER $$ -- ignore semicolons to allow multiple sql statements to execute, ends on $$
+
+CREATE TRIGGER assign_vault_number -- automatic rule that assigns a random VaultNumber
+BEFORE INSERT ON Users -- runs before a user/row is inserted
+FOR EACH ROW -- runs once for every user/row inserted
+BEGIN -- trigger starts
+  SET NEW.VaultNumber = FLOOR(1 + RAND() * 122); -- generated a random decimal between 0-1, multiplied by 122, FLOOR rounds down
+END$$ -- trigger ends
+
+DELIMITER ;
