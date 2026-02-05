@@ -21,7 +21,7 @@
     // Get new user's first name, last name, login, and password
     $inputs = json_decode(file_get_contents('php://input'), true);
 	
-    // Create MySQL db connection
+    // Create MySQL database connection
     $connection = new mysqli("localhost", "", "", "COP4331"); // Update with admin info
     if($connection)
     {

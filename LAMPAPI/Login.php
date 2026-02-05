@@ -18,26 +18,20 @@
 		echo $jsonObj;
     }
     
-    // Create associative array (like dictionary/hash table) with decoded json from api request
+    // Get user's login and password
     $inputs = json_decode(file_get_contents('php://input'), true);
 	
-    // Create MySQL db connection, providing all specified info
+    // Create MySQL database connection
     $connection = new mysqli("localhost", "", "", "COP4331"); // Update with admin info
-
-    // Checks for connection errors
     if($connection)
     {
-        // Prepared statement for querying in database prevents sql injection
+        // Search for user in the database
         $query = $connection->prepare("SELECT ID,firstName,lastName FROM Users WHERE Login=? AND Password =?");
-
-        // Puts user login info from request into statement, ss means both first and second variable are strings
         $query->bind_param("ss", $inputs["login"], $inputs["password"]);
-
-        // Send query and recieve data from database in array-like form where every row is one index
         $query->execute();
-        $response = $query->get_result();
 
-        // Creates associative array with one row (the user's data) if a result is found, else return false
+        // If a user is found, get and send its data
+        $response = $query->get_result();
         if($userInfo = $response->fetch_assoc())
         {
             $obj = '{"id":'.$userInfo["ID"].',
@@ -49,7 +43,6 @@
             sendResponse($obj);
         }
 
-        // Frees database resources to avoid memory leaks
         $query->close();
         $connection->close();
     }
