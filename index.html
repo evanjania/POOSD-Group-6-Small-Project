@@ -1,184 +1,437 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VaultBook - Login</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&family=Share+Tech+Mono&family=VT323&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        background: '#447AB9',
-                        primary: '#FEF265', // Vault-Tec Yellow
-                        'primary-foreground': '#0D0D01', // Dark contrast for yellow
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VaultBook - Login</title>
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&family=Share+Tech+Mono&family=VT323&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            background: "#447AB9",
+                            primary: "#FEF265", // Vault-Tec Yellow
+                            "primary-foreground": "#0D0D01", // Dark contrast for yellow
+                        },
+                        fontFamily: {
+                            sans: ['"Roboto Condensed"', "sans-serif"],
+                            mono: ['"VT323"', "monospace"],
+                        },
+                        animation: {
+                            scan: "scan 8s linear infinite",
+                        },
+                        keyframes: {
+                            scan: {
+                                "0%": { backgroundPosition: "0 0" },
+                                "100%": { backgroundPosition: "0 100%" },
+                            },
+                        },
                     },
-                    fontFamily: {
-                        sans: ['"Roboto Condensed"', 'sans-serif'],
-                        mono: ['"VT323"', 'monospace'],
-                    },
-                    animation: {
-                        'scan': 'scan 8s linear infinite',
-                    },
-                    keyframes: {
-                        scan: {
-                            '0%': { backgroundPosition: '0 0' },
-                            '100%': { backgroundPosition: '0 100%' },
-                        }
-                    }
+                },
+            };
+        </script>
+
+        <style>
+            /* Custom Utilities from index.css */
+            .text-glow {
+                text-shadow:
+                    0 0 5px rgba(254, 242, 101, 0.5),
+                    0 0 10px rgba(254, 242, 101, 0.3);
+            }
+
+            .crt-scanline {
+                background: linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.2) 50%,
+                    rgba(0, 0, 0, 0.2)
+                );
+                background-size: 100% 4px;
+            }
+
+            /* Selection Color Override */
+            ::selection {
+                background-color: #fef265;
+                color: #000;
+            }
+
+            .tab-active {
+                background-color: rgba(254, 242, 101, 0.1);
+                border-bottom-width: 2px;
+                border-color: #fef265;
+                color: #fef265;
+                text-shadow: 0 0 5px rgba(254, 242, 101, 0.5);
+            }
+
+            .tab-inactive {
+                opacity: 0.5;
+                border-bottom-width: 2px;
+                border-color: transparent;
+            }
+
+            .tab-inactive:hover {
+                opacity: 0.8;
+                background-color: rgba(254, 242, 101, 0.05);
+            }
+        </style>
+    </head>
+    <body
+        class="min-h-screen bg-[url('vault-tec-bg.png')] bg-cover bg-center text-primary font-sans relative overflow-hidden flex items-center justify-center p-4 md:p-8"
+    >
+        <!-- Overlay for readability -->
+        <div
+            class="absolute inset-0 bg-[#447AB9]/80 mix-blend-multiply z-0"
+        ></div>
+        <div class="absolute inset-0 bg-black/20 z-0"></div>
+
+        <div
+            class="w-full max-w-[95%] xl:max-w-[90rem] grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10"
+        >
+            <!-- Left Column: Terminal Login -->
+            <div
+                class="w-full max-w-2xl mx-auto border-2 border-primary p-1 bg-[#0D0D01]/90 shadow-[0_0_20px_rgba(254,242,101,0.1)]"
+            >
+                <div
+                    class="border border-primary p-8 md:p-12 space-y-8 flex flex-col h-full min-h-[550px]"
+                >
+                    <!-- Header -->
+                    <header class="space-y-6 pb-2">
+                        <h1
+                            class="text-3xl md:text-4xl tracking-widest text-glow font-bold leading-tight"
+                        >
+                            Welcome to VaultBook!
+                        </h1>
+
+                        <!-- Toggle Switch -->
+                        <div
+                            class="flex border-b border-primary/30 mt-6 font-bold tracking-wider text-lg"
+                        >
+                            <button
+                                id="toggleLogin"
+                                class="flex-1 py-3 px-4 text-center transition-all duration-300 tab-active"
+                            >
+                                > LOGIN
+                            </button>
+                            <button
+                                id="toggleSignup"
+                                class="flex-1 py-3 px-4 text-center transition-all duration-300 tab-inactive"
+                            >
+                                > REGISTER
+                            </button>
+                        </div>
+                    </header>
+
+                    <!-- Form -->
+                    <form
+                        id="authForm"
+                        class="space-y-6 flex-1 flex flex-col justify-center"
+                    >
+                        <!-- LOGIN FIELDS -->
+                        <div id="loginFields" class="space-y-8">
+                            <div class="text-sm font-normal opacity-80 mb-6">
+                                &gt; Your go-to contact manager in the wake of
+                                the Fallout.
+                            </div>
+
+                            <div class="space-y-3 group">
+                                <label
+                                    class="block text-base tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
+                                >
+                                    &gt; Enter Username
+                                </label>
+                                <div
+                                    class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-4 transition-colors"
+                                >
+                                    <span class="text-2xl">]</span>
+                                    <input
+                                        type="text"
+                                        id="loginUsername"
+                                        class="bg-transparent border-none outline-none w-full text-2xl placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
+                                        placeholder="User.ID"
+                                    />
+                                    <span class="text-2xl">_</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 group">
+                                <label
+                                    class="block text-base tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
+                                >
+                                    &gt; Enter Password
+                                </label>
+                                <div
+                                    class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-4 transition-colors"
+                                >
+                                    <span class="text-2xl">]</span>
+                                    <input
+                                        type="password"
+                                        id="loginPassword"
+                                        class="bg-transparent border-none outline-none w-full text-2xl placeholder:text-primary/30 focus:ring-0 font-normal"
+                                        placeholder="********"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SIGNUP FIELDS (Hidden by default) -->
+                        <div id="signupFields" class="space-y-6 hidden">
+                            <div class="text-sm font-normal opacity-80 mb-4">
+                                &gt; Create new Vault Dweller profile.
+                            </div>
+
+                            <!-- First & Last Name Grid -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-2 group">
+                                    <label
+                                        class="block text-sm tracking-wider opacity-80 font-bold uppercase"
+                                    >
+                                        &gt; First Name
+                                    </label>
+                                    <div
+                                        class="flex items-center space-x-2 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-2 transition-colors"
+                                    >
+                                        <input
+                                            type="text"
+                                            id="firstName"
+                                            class="bg-transparent border-none outline-none w-full text-lg placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
+                                            placeholder="JOHN"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="space-y-2 group">
+                                    <label
+                                        class="block text-sm tracking-wider opacity-80 font-bold uppercase"
+                                    >
+                                        &gt; Last Name
+                                    </label>
+                                    <div
+                                        class="flex items-center space-x-2 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-2 transition-colors"
+                                    >
+                                        <input
+                                            type="text"
+                                            id="lastName"
+                                            class="bg-transparent border-none outline-none w-full text-lg placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
+                                            placeholder="DOE"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- New Username -->
+                            <div class="space-y-2 group">
+                                <label
+                                    class="block text-base tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
+                                >
+                                    &gt; Choose Username
+                                </label>
+                                <div
+                                    class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-3 transition-colors"
+                                >
+                                    <span class="text-xl">]</span>
+                                    <input
+                                        type="text"
+                                        id="signupUsername"
+                                        class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
+                                        placeholder="NEW.USER.ID"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="space-y-2 group">
+                                <label
+                                    class="block text-base tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
+                                >
+                                    &gt; Set Password
+                                </label>
+                                <div
+                                    class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-3 transition-colors"
+                                >
+                                    <span class="text-xl">]</span>
+                                    <input
+                                        type="password"
+                                        id="signupPassword"
+                                        class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-normal"
+                                        placeholder="********"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button
+                                type="submit"
+                                id="submitBtn"
+                                class="w-full border-2 border-primary py-4 px-8 text-xl md:text-2xl bg-transparent text-primary hover:bg-primary hover:text-background transition-colors uppercase tracking-[0.2em] font-bold cursor-pointer"
+                            >
+                                <span
+                                    id="btnText"
+                                    class="flex items-center justify-center gap-3"
+                                >
+                                    INITIATE LOGIN
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Footer Status -->
+                    <footer
+                        class="pt-6 border-t border-primary/50 text-sm opacity-70 space-y-2 font-normal"
+                    >
+                        <div class="text-center">
+                            &gt; Small Project by Erkan A, Logan E, Kevin E,
+                            Evan J, and Siddanth R.
+                        </div>
+                    </footer>
+                </div>
+            </div>
+
+            <!-- Right Column: CRT Monitor Artifact -->
+            <div
+                class="hidden md:flex flex-col items-center justify-center relative w-full"
+            >
+                <!-- Monitor Bezel -->
+                <div
+                    class="relative p-10 bg-zinc-900 rounded-[2.5rem] border-4 border-zinc-800 shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_20px_rgba(0,0,0,1)] w-full max-w-[650px]"
+                >
+                    <!-- Screen Content -->
+                    <div
+                        class="relative rounded-[2rem] overflow-hidden border-4 border-zinc-950 bg-black aspect-square w-full flex items-center justify-center"
+                    >
+                        <!-- Image -->
+                        <div
+                            class="absolute inset-0 bg-[url('./pip-boy.webp')] bg-cover bg-center opacity-80 mix-blend-screen grayscale contrast-125 brightness-150 sepia hue-rotate-[-45deg] saturate-[5]"
+                        ></div>
+
+                        <!-- Strong CRT Scanlines for the Monitor -->
+                        <div
+                            class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.5)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(254,242,101,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_4px,3px_100%] pointer-events-none"
+                        ></div>
+                        <div
+                            class="absolute inset-0 bg-repeat-y h-full w-full pointer-events-none z-10 opacity-20 animate-scan bg-[linear-gradient(to_bottom,transparent,rgba(254,242,101,0.2)_50%,transparent)] bg-[length:100%_100%]"
+                        ></div>
+
+                        <!-- Screen Glow -->
+                        <div
+                            class="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.7)] z-20 pointer-events-none rounded-[2rem]"
+                        ></div>
+
+                        <!-- Screen Reflection/Glare -->
+                        <div
+                            class="absolute top-0 right-0 w-2/3 h-2/3 bg-gradient-to-bl from-white/5 to-transparent rounded-tr-[1.5rem] z-30 pointer-events-none"
+                        ></div>
+                    </div>
+
+                    <!-- Monitor Controls -->
+                    <div class="absolute bottom-4 right-12 flex space-x-4">
+                        <div
+                            class="w-3 h-3 rounded-full bg-red-900/50 border border-red-800"
+                        ></div>
+                        <div
+                            class="w-3 h-3 rounded-full bg-primary shadow-[0_0_5px_currentColor]"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Toggle Logic
+            const toggleLogin = document.getElementById("toggleLogin");
+            const toggleSignup = document.getElementById("toggleSignup");
+            const loginFields = document.getElementById("loginFields");
+            const signupFields = document.getElementById("signupFields");
+            const btnText = document.getElementById("btnText");
+            const loginUsernameInput = document.getElementById("loginUsername");
+            const firstNameInput = document.getElementById("firstName");
+
+            let isLogin = true;
+
+            toggleLogin.addEventListener("click", () => {
+                isLogin = true;
+                updateUI();
+            });
+
+            toggleSignup.addEventListener("click", () => {
+                isLogin = false;
+                updateUI();
+            });
+
+            function updateUI() {
+                if (isLogin) {
+                    // Show Login
+                    loginFields.classList.remove("hidden");
+                    signupFields.classList.add("hidden");
+
+                    // Update Toggles
+                    toggleLogin.classList.add("tab-active");
+                    toggleLogin.classList.remove("tab-inactive");
+                    toggleSignup.classList.remove("tab-active");
+                    toggleSignup.classList.add("tab-inactive");
+
+                    // Update Button
+                    btnText.innerHTML = "INITIATE LOGIN";
+
+                    // Focus
+                    loginUsernameInput.focus();
+                } else {
+                    // Show Signup
+                    loginFields.classList.add("hidden");
+                    signupFields.classList.remove("hidden");
+
+                    // Update Toggles
+                    toggleSignup.classList.add("tab-active");
+                    toggleSignup.classList.remove("tab-inactive");
+                    toggleLogin.classList.remove("tab-active");
+                    toggleLogin.classList.add("tab-inactive");
+
+                    // Update Button
+                    btnText.innerHTML = "CREATE PROFILE";
+
+                    // Focus
+                    firstNameInput.focus();
                 }
             }
-        }
-    </script>
 
-    <style>
-        /* Custom Utilities from index.css */
-        .text-glow {
-            text-shadow: 0 0 5px rgba(254, 242, 101, 0.5), 0 0 10px rgba(254, 242, 101, 0.3);
-        }
-        
-        .crt-scanline {
-            background: linear-gradient(
-                to bottom,
-                rgba(255,255,255,0),
-                rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.2) 50%,
-                rgba(0,0,0,0.2)
-            );
-            background-size: 100% 4px;
-        }
+            // Form Submission
+            document
+                .getElementById("authForm")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
 
-        /* Selection Color Override */
-        ::selection {
-            background-color: #FEF265;
-            color: #000;
-        }
-    </style>
-</head>
-<body class="min-h-screen bg-background text-primary font-sans relative overflow-hidden flex items-center justify-center p-4 md:p-8">
+                    const originalText = btnText.innerHTML;
+                    btnText.innerHTML = "PROCESSING... <span>_</span>";
 
-    <div class="w-full max-w-[95%] xl:max-w-[90rem] grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
-        
-        <!-- Left Column: Terminal Login -->
-        <div class="w-full max-w-2xl mx-auto border-2 border-primary p-1 bg-[#0D0D01]/90 shadow-[0_0_20px_rgba(254,242,101,0.1)]">
-            <div class="border border-primary p-8 md:p-12 space-y-10 flex flex-col h-full min-h-[550px]">
-                
-                <!-- Header -->
-                <header class="space-y-6 border-b border-primary/50 pb-8">
-                    <h1 class="text-3xl md:text-4xl tracking-widest text-glow font-bold leading-tight">
-                        Welcome to VaultBook!
-                    </h1>
-                    <div class="text-sm font-normal">
-                        &gt; Your go-to contact manager in the wake of the Fallout.
-                    </div>
-                </header>
+                    setTimeout(() => {
+                        console.log(
+                            isLogin
+                                ? "Login attempt successful"
+                                : "Signup attempt successful",
+                        );
+                        // Here you would redirect or handle auth
+                        btnText.innerHTML = isLogin
+                            ? "ACCESS GRANTED"
+                            : "PROFILE CREATED";
 
-                <!-- Form -->
-                <form id="loginForm" class="space-y-8 flex-1 flex flex-col justify-center">
-                    <div class="space-y-3 group">
-                        <label class="block text-base tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase">
-                            &gt; Enter Username
-                        </label>
-                        <div class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-4 transition-colors">
-                            <span class="text-2xl">]</span>
-                            <input
-                                type="text"
-                                id="username"
-                                class="bg-transparent border-none outline-none w-full text-2xl placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
-                                placeholder="User.ID"
-                                autofocus
-                            />
-                            <span class="text-2xl">_</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 group">
-                        <label class="block text-base tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase">
-                            &gt; Enter Password
-                        </label>
-                        <div class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-4 transition-colors">
-                            <span class="text-2xl">]</span>
-                            <input
-                                type="password"
-                                id="password"
-                                class="bg-transparent border-none outline-none w-full text-2xl placeholder:text-primary/30 focus:ring-0 font-normal"
-                                placeholder="********"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="pt-6">
-                        <button
-                            type="submit"
-                            class="w-full border-2 border-primary py-4 px-8 text-xl md:text-2xl bg-transparent text-primary hover:bg-primary hover:text-background transition-colors uppercase tracking-[0.2em] font-bold cursor-pointer"
-                        >
-                            <span id="btnText" class="flex items-center justify-center gap-3">
-                                INITIATE LOGIN
-                            </span>
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Footer Status -->
-                <footer class="pt-6 border-t border-primary/50 text-sm opacity-70 space-y-2 font-normal">
-                    <div class="text-center">
-                        &gt; Small Project by Erkan A, Logan E, Kevin E, Evan J, and Siddanth R.
-                    </div>
-                </footer>
-            </div>
-        </div>
-
-        <!-- Right Column: CRT Monitor Artifact -->
-        <div class="hidden md:flex flex-col items-center justify-center relative w-full">
-            <!-- Monitor Bezel -->
-            <div class="relative p-10 bg-zinc-900 rounded-[2.5rem] border-4 border-zinc-800 shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_20px_rgba(0,0,0,1)] w-full max-w-[650px]">
-                <!-- Screen Content -->
-                <div class="relative rounded-[2rem] overflow-hidden border-4 border-zinc-950 bg-black aspect-square w-full flex items-center justify-center">
-                    
-                    <!-- Image -->
-                    <div class="absolute inset-0 bg-[url('./pip-boy.webp')] bg-cover bg-center opacity-80 mix-blend-screen grayscale contrast-125 brightness-150 sepia hue-rotate-[-45deg] saturate-[5]"></div>
-                    
-                    <!-- Strong CRT Scanlines for the Monitor -->
-                    <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.5)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(254,242,101,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_4px,3px_100%] pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-repeat-y h-full w-full pointer-events-none z-10 opacity-20 animate-scan bg-[linear-gradient(to_bottom,transparent,rgba(254,242,101,0.2)_50%,transparent)] bg-[length:100%_100%]"></div>
-                    
-                    <!-- Screen Glow -->
-                    <div class="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.7)] z-20 pointer-events-none rounded-[2rem]"></div>
-                    
-                    <!-- Screen Reflection/Glare -->
-                    <div class="absolute top-0 right-0 w-2/3 h-2/3 bg-gradient-to-bl from-white/5 to-transparent rounded-tr-[1.5rem] z-30 pointer-events-none"></div>
-                </div>
-                
-                <!-- Monitor Controls -->
-                <div class="absolute bottom-4 right-12 flex space-x-4">
-                    <div class="w-3 h-3 rounded-full bg-red-900/50 border border-red-800"></div>
-                    <div class="w-3 h-3 rounded-full bg-primary shadow-[0_0_5px_currentColor]"></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btnText = document.getElementById('btnText');
-            btnText.innerHTML = "PROCESSING... <span>_</span>";
-            
-            setTimeout(() => {
-                console.log("Login attempt successful");
-                // Here you would redirect, e.g., window.location.href = 'dashboard.html';
-                btnText.innerHTML = "ACCESS GRANTED";
-            }, 1500);
-        });
-    </script>
-</body>
+                        // Reset after a moment just for demo
+                        setTimeout(() => {
+                            // window.location.href = 'dashboard.html'; // Uncomment to redirect
+                            // For now, just reset button to show it's "done"
+                        }, 1000);
+                    }, 1500);
+                });
+        </script>
+    </body>
 </html>
