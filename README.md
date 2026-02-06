@@ -9,4 +9,6 @@ POOSD Group 6 Contact Sheet
 | Siddanth Rajan | Backend        |                                      |
 | Erkan Altundal | API / FrontEnd | erkankerem532@gmail.com              |
 
-  
+Domain: vaultbook.org
+LAMP IP: 165.245.143.177
+Password: 272796Poosd
