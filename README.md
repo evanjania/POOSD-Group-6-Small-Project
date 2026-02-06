@@ -6,7 +6,7 @@ POOSD Group 6 Contact Sheet
 | Evan Jania     | PM / Front End | evanjania@gmail.com / 386-451-2488   |
 | Logan Elkins   | API            | loganelkins0101@gmail.com            |
 | Kevin Estrada  | Database       | kevinkevin2796@gmail.com/407-953-6630|
-| Siddanth Rajan | Backend        |                                      |
+| Siddanth Rajan | Backend        | sid.rajan1323@gmail.com              |
 | Erkan Altundal | API / FrontEnd | erkankerem532@gmail.com              |
 
 Domain: vaultbook.org
