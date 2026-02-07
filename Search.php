@@ -23,7 +23,7 @@
         sendError($conn->connect_error);
     }else{
         // Search via partial matching
-        $search = "%".$march."%";
+        $search = "%".$match."%";
         $stmt = $conn->prepare("SELECT * FROM Contact WHERE (FirstName LIKE ? OR LastName LIKE ?) AND UserID = ?");
         $stmt->bind_param("ssi", $search, $search, $userId);
         $stmt->execute();
