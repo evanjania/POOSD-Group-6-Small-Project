@@ -16,16 +16,16 @@
 
     // Save them in variables
     $match = $inputs["search"];
-    $userId = $inputs["userId"]; 
+    $vaultnum = $inputs["vaultnum"]; 
 
-    $conn = new mysqli("localhost", "", "", "COP4331");
+    $conn = new mysqli("%", "VaultBook", "POOSD6", "COP4331");
     if($conn->connect_error){
         sendError($conn->connect_error);
     }else{
         // Search via partial matching
         $search = "%".$match."%";
-        $stmt = $conn->prepare("SELECT * FROM Contact WHERE (FirstName LIKE ? OR LastName LIKE ?) AND UserID = ?");
-        $stmt->bind_param("ssi", $search, $search, $userId);
+        $stmt = $conn->prepare("SELECT * FROM Contact WHERE (FirstName LIKE ? OR LastName LIKE ?) AND VaultNumber = ?");
+        $stmt->bind_param("ssi", $search, $search, $vaultnum);
         $stmt->execute();
 
         $result = $stmt->get_result();
@@ -39,8 +39,7 @@
             }
             $searchCount++;
             // Append all of the results in a variable
-            $searchResults .= $row["FirstName"]. ", ". $row["LastName"] .", ". $row["Phone"] .", ".
-                                $row["Email"] .", ". $row["ID"];
+            $searchResults .= $row["FirstName"]. ", ". $row["LastName"] .", ". $row["ID"];
         }  
 
         // If no results, send an error message
