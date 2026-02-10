@@ -41,11 +41,11 @@ CREATE TABLE `COP4331`.`Contacts`
 
 DELIMITER $$ -- ignore semicolons to allow multiple sql statements to execute, ends on $$
 
-CREATE TRIGGER assign_vault_number -- automatic rule that assigns a random VaultNumber
-BEFORE INSERT ON Users -- runs before a user/row is inserted
+CREATE TRIGGER assign_contact_vault_number -- automatic rule that assigns a random VaultNumber
+BEFORE INSERT ON Contacts -- runs before a user/row is inserted
 FOR EACH ROW -- runs once for every user/row inserted
 BEGIN -- trigger starts
-  SET NEW.VaultNumber = FLOOR(1 + RAND() * 122); -- generated a random decimal between 0-1, multiplied by 122, FLOOR rounds down
+  SET NEW.VaultNumber = FLOOR(1 + RAND() * 10); -- generates a random vaultNumber between 1-10, FLOOR rounds down
 END$$ -- trigger ends
 
 DELIMITER ;
