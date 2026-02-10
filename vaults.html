@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VaultBook - Directory</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&family=VT323&display=swap" rel="stylesheet" />
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            background: "#447AB9",
+                            primary: "#FEF265",
+                            "primary-foreground": "#0D0D01",
+                        },
+                        fontFamily: {
+                            sans: ['"Roboto Condensed"', "sans-serif"],
+                            mono: ['"VT323"', "monospace"],
+                        },
+                    },
+                },
+            };
+        </script>
+
+        <style>
+            ::selection {
+                background-color: #fef265;
+                color: #000;
+            }
+            nav{
+                background: rgba(13, 13, 1, 0.85);
+            }
+            .text-glow {
+                text-shadow: 0 0 8px rgba(254, 242, 101, 0.6);
+            }
+            .vault-card {
+                background: rgba(13, 13, 1, 0.85);
+                border: 2px solid #fef265;
+                box-shadow: 0 0 15px rgba(254, 242, 101, 0.1);
+                transition: all 0.3s ease;
+            }
+            .vault-card:hover {
+                box-shadow: 0 0 25px rgba(254, 242, 101, 0.3);
+                transform: translateY(-5px);
+            }
+            .crt-overlay {
+                background: linear-gradient(rgba(17, 18, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+                background-size: 100% 4px;
+                pointer-events: none;
+            }
+        </style>
+    </head>
+    <body class="min-h-screen bg-[url('vault-tec-bg.png')] bg-cover bg-center text-primary font-sans relative items-center justify-center">
+        
+        <div class="fixed inset-0 crt-overlay z-50"></div>
+        <div class="absolute inset-0 bg-[#447AB9]/80 mix-blend-multiply z-0"></div>
+        <div class="absolute inset-0 bg-black/20 z-0"></div>
+        
+        <!--navbar-->
+        <nav class="sticky bg-black top-0 flex justify-between items-center px-10 py-4 shadow-md z-20">
+            <div class="text-2xl font-bold text-blue-600 text-primary">
+                VaultBook
+            </div>
+    
+            <div class="md:flex space-x-8 font-medium text-gray-600">
+                <div class="flex border-2 border-[#fef265] p-3 items-center gap-10 focus-within:animate-pulse">
+                    <span class="font-mono text-xl ml-5">&gt; SEARCH_FILTER:</span>
+                    <input type="text" placeholder="ENTER NAME OR VAULT ID..." class="bg-transparent border-b border-primary/20 outline-none flex-1 font-mono text-xl placeholder:opacity-30 uppercase focus:border-primary transition-colors">
+                </div>
+            </div>
+    
+            <div class="flex space gap-5">
+                <button class="font-mono px-6 py-1 border border-red-500/50 text-red-500 text-xl transition-all
+                            hover:bg-[#fef26599] hover:bg-red-500 hover:text-white uppercase">
+                    [ LogOut ]
+                </button>
+                <button class="w-12 h-12 border-2 border-primary rounded-full flex items-center justify-center">
+                </button>
+            </div>
+        </nav>
+      
+        <div class="relative z-10 max-w-[55%] mx-auto space-y-8 mt-10">
+            <main class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- individual vaults -->
+                <section class="vault-card overflow-hidden">
+                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
+                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 10</span>
+                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <!--each user-->
+                        <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
+                            <div class="flex">
+                                <span class="font-bold text-lg leading-tight uppercase">James Walker</span>
+                            </div>
+                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW_DATA</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
+                            <div class="flex">
+                                <span class="font-bold text-lg leading-tight uppercase">Amata Almodovar</span>
+                            </div>
+                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW_DATA</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="vault-card overflow-hidden">
+                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
+                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 4</span>
+                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
+                            <div class="flex">
+                                <span class="font-bold text-lg leading-tight uppercase">Rosemary Miller</span>
+                            </div>
+                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW_DATA</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="vault-card overflow-hidden">
+                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
+                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 1</span>
+                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
+                            <div class="flex">
+                                <span class="font-bold text-lg leading-tight uppercase">Sarah Weintraub</span>
+                            </div>
+                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW_DATA</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="vault-card overflow-hidden">
+                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
+                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 6</span>
+                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
+                    </div>
+                    <div class="p-6 space-y-4 text-center opacity-40 italic py-10">
+                        <p class="font-mono">NO DATA RETRIEVED</p>
+                    </div>
+                </section>
+
+
+                <section class="vault-card overflow-hidden">
+                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
+                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 7</span>
+                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
+                    </div>
+                    <div class="p-6 space-y-4 text-center opacity-40 italic py-10">
+                        <p class="font-mono">NO DATA RETRIEVED</p>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+        <script>
+
+        </script>
+    </body>
+</html>
