@@ -24,7 +24,7 @@
     }else{
         // Search via partial matching
         $search = "%".$match."%";
-        $stmt = $conn->prepare("SELECT * FROM Contact WHERE (FirstName LIKE ? OR LastName LIKE ?) AND VaultNumber = ?");
+        $stmt = $conn->prepare("SELECT * FROM Contacts WHERE (FirstName LIKE ? OR LastName LIKE ?) AND VaultNumber = ?");
         $stmt->bind_param("ssi", $search, $search, $vaultnum);
         $stmt->execute();
 
@@ -35,11 +35,13 @@
         // Feth any results with an associative array
         while($row = $result->fetch_assoc()) {
             if($searchCount > 0){
-                $searchResults .= "";
+                $searchResults .= ",";
             }
             $searchCount++;
             // Append all of the results in a variable
-            $searchResults .= $row["FirstName"]. ", ". $row["LastName"] .", ". $row["ID"];
+            $searchResults .= '{"firstName":"' . $row["FirstName"] 
+                            . '", "lastName":"' . $row["LastName"]
+                            . '", "vaultNumber":"' . $row["VaultNumber"] . '"}';
         }  
 
         // If no results, send an error message
