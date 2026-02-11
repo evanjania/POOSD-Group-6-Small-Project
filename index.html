@@ -85,6 +85,23 @@
                 opacity: 0.8;
                 background-color: rgba(254, 242, 101, 0.05);
             }
+
+            .error-message {
+                border: 2px solid #ff6b6b;
+                background-color: rgba(255, 107, 107, 0.1);
+                color: #ff6b6b;
+                padding: 1rem;
+                margin-top: 1rem;
+                text-align: center;
+                font-weight: bold;
+                animation: shake 0.5s;
+            }
+
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
         </style>
     </head>
     <body
@@ -133,6 +150,9 @@
                         </div>
                     </header>
 
+                    <!-- Error Message Container -->
+                    <div id="errorContainer" class="hidden"></div>
+
                     <!-- Form -->
                     <form
                         id="authForm"
@@ -158,8 +178,9 @@
                                     <input
                                         type="text"
                                         id="loginUsername"
-                                        class="bg-transparent border-none outline-none w-full text-2xl placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
+                                        class="bg-transparent border-none outline-none w-full text-2xl placeholder:text-primary/30 focus:ring-0 font-bold tracking-widest"
                                         placeholder="User.ID"
+                                        required
                                     />
                                     <span class="text-2xl">_</span>
                                 </div>
@@ -180,61 +201,61 @@
                                         id="loginPassword"
                                         class="bg-transparent border-none outline-none w-full text-2xl placeholder:text-primary/30 focus:ring-0 font-normal"
                                         placeholder="********"
+                                        required
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <!-- SIGNUP FIELDS (Hidden by default) -->
-                        <div id="signupFields" class="space-y-6 hidden">
+                        <!-- SIGNUP FIELDS -->
+                        <div id="signupFields" class="hidden space-y-6">
                             <div class="text-sm font-normal opacity-80 mb-4">
-                                &gt; Create new Vault Dweller profile.
+                                &gt; Register for your new Vault profile.
                             </div>
 
-                            <!-- First & Last Name Grid -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="space-y-2 group">
-                                    <label
-                                        class="block text-sm tracking-wider opacity-80 font-bold uppercase"
-                                    >
-                                        &gt; First Name
-                                    </label>
-                                    <div
-                                        class="flex items-center space-x-2 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-2 transition-colors"
-                                    >
-                                        <input
-                                            type="text"
-                                            id="firstName"
-                                            class="bg-transparent border-none outline-none w-full text-lg placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
-                                            placeholder="JOHN"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="space-y-2 group">
-                                    <label
-                                        class="block text-sm tracking-wider opacity-80 font-bold uppercase"
-                                    >
-                                        &gt; Last Name
-                                    </label>
-                                    <div
-                                        class="flex items-center space-x-2 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-2 transition-colors"
-                                    >
-                                        <input
-                                            type="text"
-                                            id="lastName"
-                                            class="bg-transparent border-none outline-none w-full text-lg placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
-                                            placeholder="DOE"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- New Username -->
-                            <div class="space-y-2 group">
+                            <div class="space-y-3 group">
                                 <label
-                                    class="block text-base tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
+                                    class="block text-sm tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
                                 >
-                                    &gt; Choose Username
+                                    &gt; First Name
+                                </label>
+                                <div
+                                    class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-3 transition-colors"
+                                >
+                                    <span class="text-xl">]</span>
+                                    <input
+                                        type="text"
+                                        id="firstName"
+                                        class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-bold tracking-widest"
+                                        placeholder="First Name"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 group">
+                                <label
+                                    class="block text-sm tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
+                                >
+                                    &gt; Last Name
+                                </label>
+                                <div
+                                    class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-3 transition-colors"
+                                >
+                                    <span class="text-xl">]</span>
+                                    <input
+                                        type="text"
+                                        id="lastName"
+                                        class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-bold tracking-widest"
+                                        placeholder="Last Name"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 group">
+                                <label
+                                    class="block text-sm tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
+                                >
+                                    &gt; Username
                                 </label>
                                 <div
                                     class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-3 transition-colors"
@@ -243,18 +264,17 @@
                                     <input
                                         type="text"
                                         id="signupUsername"
-                                        class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-normal uppercase"
-                                        placeholder="NEW.USER.ID"
+                                        class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-bold tracking-widest"
+                                        placeholder="Choose username"
                                     />
                                 </div>
                             </div>
 
-                            <!-- Password -->
-                            <div class="space-y-2 group">
+                            <div class="space-y-3 group">
                                 <label
-                                    class="block text-base tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
+                                    class="block text-sm tracking-wider opacity-80 group-focus-within:opacity-100 group-focus-within:text-glow font-bold uppercase"
                                 >
-                                    &gt; Set Password
+                                    &gt; Password
                                 </label>
                                 <div
                                     class="flex items-center space-x-3 border-b-2 border-primary/30 focus-within:border-primary bg-primary/5 p-3 transition-colors"
@@ -356,8 +376,18 @@
             const btnText = document.getElementById("btnText");
             const loginUsernameInput = document.getElementById("loginUsername");
             const firstNameInput = document.getElementById("firstName");
+            const errorContainer = document.getElementById("errorContainer");
 
             let isLogin = true;
+
+            // Function to show error message
+            function showError(message) {
+                errorContainer.className = "error-message";
+                errorContainer.textContent = "> ERROR: " + message;
+                setTimeout(() => {
+                    errorContainer.className = "hidden";
+                }, 5000); // Hide after 5 seconds
+            }
 
             toggleLogin.addEventListener("click", () => {
                 isLogin = true;
@@ -370,6 +400,9 @@
             });
 
             function updateUI() {
+                // Clear any error messages
+                errorContainer.className = "hidden";
+                
                 if (isLogin) {
                     // Show Login
                     loginFields.classList.remove("hidden");
@@ -408,29 +441,81 @@
             // Form Submission
             document
                 .getElementById("authForm")
-                .addEventListener("submit", function (e) {
+                .addEventListener("submit", async function (e) {
                     e.preventDefault();
 
+                    const submitBtn = document.getElementById("submitBtn");
                     const originalText = btnText.innerHTML;
+                    
+                    // Disable button during submission
+                    submitBtn.disabled = true;
                     btnText.innerHTML = "PROCESSING... <span>_</span>";
 
-                    setTimeout(() => {
-                        console.log(
-                            isLogin
-                                ? "Login attempt successful"
-                                : "Signup attempt successful",
-                        );
-                        // Here you would redirect or handle auth
+                    try {
+                        let endpoint, payload;
+
+                        if (isLogin) {
+                            // LOGIN
+                            endpoint = "Login.php";
+                            payload = {
+                                login: document.getElementById("loginUsername").value,
+                                password: document.getElementById("loginPassword").value
+                            };
+                        } else {
+                            // SIGNUP
+                            endpoint = "Signup.php";
+                            payload = {
+                                firstName: document.getElementById("firstName").value,
+                                lastName: document.getElementById("lastName").value,
+                                login: document.getElementById("signupUsername").value,
+                                password: document.getElementById("signupPassword").value
+                            };
+                        }
+
+                        // Make API call
+                        const response = await fetch(endpoint, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(payload),
+                        });
+
+                        const data = await response.json();
+
+                        // Check for errors
+                        if (data.error && data.error !== "") {
+                            throw new Error(data.error);
+                        }
+
+                        // Success!
                         btnText.innerHTML = isLogin
                             ? "ACCESS GRANTED"
                             : "PROFILE CREATED";
 
-                        // Reset after a moment just for demo
+                        // Store user data in sessionStorage if login was successful
+                        if (isLogin) {
+                            sessionStorage.setItem("userId", data.id);
+                            sessionStorage.setItem("firstName", data.firstName);
+                            sessionStorage.setItem("lastName", data.lastName);
+                        }
+
+                        // Redirect after a moment
                         setTimeout(() => {
-                            // window.location.href = 'dashboard.html'; // Uncomment to redirect
-                            // For now, just reset button to show it's "done"
-                        }, 1000);
-                    }, 1500);
+                            // Uncomment and update with your dashboard page
+                            // window.location.href = 'dashboard.html';
+                            console.log("Redirect to dashboard would happen here");
+                            console.log("User data:", data);
+                        }, 1500);
+
+                    } catch (error) {
+                        // Show error
+                        showError(error.message || "An unexpected error occurred");
+                        
+                        // Reset button
+                        btnText.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
                 });
         </script>
     </body>
