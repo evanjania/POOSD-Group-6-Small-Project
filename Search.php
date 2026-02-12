@@ -41,6 +41,9 @@
             // Append all of the results in a variable
             $searchResults .= '{"firstName":"' . $row["FirstName"] 
                             . '", "lastName":"' . $row["LastName"]
+                            . '", "phone":"'. $row["Phone"]
+                            . '", "email":"' . $row["Email"]
+                            . '", "userID":"'. $row["UserID"]
                             . '", "vaultNumber":"' . $row["VaultNumber"] . '"}';
         }  
 
