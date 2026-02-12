@@ -89,7 +89,7 @@
         </nav>
       
         <div class="relative z-10 max-w-[55%] mx-auto space-y-8 mt-10">
-            <main class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <main class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
                 <!--main dashboard where vaults are located-->
 
             </main>
@@ -182,9 +182,16 @@
             // render the active vaults where any search matches the regex
             function renderActives(vNum, contacts) {
                 let contactList = contacts.map(c => `
-                    <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
-                        <span class="font-bold text-lg uppercase">${c.firstName} ${c.lastName}</span>
-                        <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW DATA</span>
+                    <div class="flex flex-col">
+                        <div onclick="toggleDetails(this)" class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
+                            <span class="font-bold text-lg uppercase">${c.firstName} ${c.lastName}</span>
+                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW DATA</span>
+                        </div>
+                        <div class="details-pane hidden grid grid-cols-1 p-3 bg-black/70 border-t border-primary/10">
+                            <span class="font-mono uppercase opacity-80">UserID: ${c.userID}</span>
+                            <span class="font-mono uppercase opacity-80">Phone: ${c.phone}</span>
+                            <span class="font-mono uppercase opacity-80">Email: ${c.email}</span>
+                        </div>    
                     </div>
                 `).join("");
 
@@ -208,6 +215,15 @@
                         </div>
                         <div class="p-6 text-center italic py-10 font-mono">NO DATA RETRIEVED</div>
                     </section>`;
+            }
+
+            //drop-down the details of the contacts (used in renderActives)
+            function toggleDetails(element){
+                const details = element.nextElementSibling;
+                details.classList.toggle('hidden');
+                const btn = element.querySelector('span:last-child');
+
+                btn.innerHTML = details.classList.contains('hidden') ? '> VIEW DATA' : '> HIDE DATA';
             }
         </script>
     </body>
