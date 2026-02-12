@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>VaultBook - Directory</title>
+        <title>VaultBook - Dashboard</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -68,15 +68,18 @@
                 VaultBook
             </div>
     
-            <div class="md:flex space-x-8 font-medium text-gray-600">
+            <div class="flex-1 mx-10 max-w-[22%] text-gray-500">
                 <div class="flex border-2 border-[#fef265] p-3 items-center gap-10 focus-within:animate-pulse">
-                    <span class="font-mono text-xl ml-5">&gt; SEARCH_FILTER:</span>
-                    <input type="text" placeholder="ENTER NAME OR VAULT ID..." class="bg-transparent border-b border-primary/20 outline-none flex-1 font-mono text-xl placeholder:opacity-30 uppercase focus:border-primary transition-colors">
+                    <span class="font-mono text-xl ml-2">&gt; SEARCH_FILTER:</span>
+                    <input type="text"
+                           id="vaultSearch"
+                           placeholder="ENTER NAME OR VAULT ID..."
+                           class="bg-transparent border-b border-primary/20 outline-none flex-1 font-mono text-xl placeholder:opacity-30 focus:border-primary transition-colors">
                 </div>
             </div>
     
             <div class="flex space gap-5">
-                <button class="font-mono px-6 py-1 border border-red-500/50 text-red-500 text-xl transition-all
+                <button id="logout" class="font-mono px-6 py-1 border border-red-500/50 text-red-500 text-xl transition-all
                             hover:bg-[#fef26599] hover:bg-red-500 hover:text-white uppercase">
                     [ LogOut ]
                 </button>
@@ -87,84 +90,125 @@
       
         <div class="relative z-10 max-w-[55%] mx-auto space-y-8 mt-10">
             <main class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <!-- individual vaults -->
-                <section class="vault-card overflow-hidden">
-                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
-                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 10</span>
-                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
-                    </div>
-                    <div class="p-6 space-y-4">
-                        <!--each user-->
-                        <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
-                            <div class="flex">
-                                <span class="font-bold text-lg leading-tight uppercase">James Walker</span>
-                            </div>
-                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW_DATA</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
-                            <div class="flex">
-                                <span class="font-bold text-lg leading-tight uppercase">Amata Almodovar</span>
-                            </div>
-                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW_DATA</span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="vault-card overflow-hidden">
-                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
-                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 4</span>
-                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
-                    </div>
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
-                            <div class="flex">
-                                <span class="font-bold text-lg leading-tight uppercase">Rosemary Miller</span>
-                            </div>
-                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW_DATA</span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="vault-card overflow-hidden">
-                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
-                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 1</span>
-                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
-                    </div>
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
-                            <div class="flex">
-                                <span class="font-bold text-lg leading-tight uppercase">Sarah Weintraub</span>
-                            </div>
-                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW_DATA</span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="vault-card overflow-hidden">
-                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
-                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 6</span>
-                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
-                    </div>
-                    <div class="p-6 space-y-4 text-center opacity-40 italic py-10">
-                        <p class="font-mono">NO DATA RETRIEVED</p>
-                    </div>
-                </section>
-
-
-                <section class="vault-card overflow-hidden">
-                    <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
-                        <span class="font-mono tracking-widest uppercase ml-5">VAULT 7</span>
-                        <span class="text-xs uppercase px-2 py-0.5 border border-background">Open</span>
-                    </div>
-                    <div class="p-6 space-y-4 text-center opacity-40 italic py-10">
-                        <p class="font-mono">NO DATA RETRIEVED</p>
-                    </div>
-                </section>
+                <!--main dashboard where vaults are located-->
 
             </main>
         </div>
         <script>
+            // if the search bar is empty, show all vaults again
+            const searchInput = document.getElementById('vaultSearch');
+            const vaultGrid = document.querySelector('main.grid');
 
+            document.addEventListener("DOMContentLoaded", () => {
+                // run an empty search if there is no input yet
+                doSearch(""); 
+            });
+            
+            searchInput.addEventListener("input", (e) => {
+                const searchText = e.target.value;
+                doSearch(searchText);
+            });
+
+            document.getElementById("logout").onclick = function () {
+                location.href = "index1.html";
+            };
+            
+            async function doSearch(term) {
+                const parts = term.trim().split(" ");
+                const lastPart = parts[parts.length - 1];
+                const hasVaultFilter = !isNaN(lastPart) && parts.length > 1;
+
+                const vaultInput = hasVaultFilter ? parseInt(lastPart) : 0;
+                const nameInput = hasVaultFilter ? parts.slice(0, -1).join(" ") : term;
+
+                const payload = {
+                    search: nameInput,
+                    vaultnum: vaultInput
+                };
+
+                //console.log("Terminal Sending:", payload); //for debugging
+
+                try {
+                    const response = await fetch("Search.php", {
+                        method: "POST",
+                        body: JSON.stringify(payload),
+                        headers: { "Content-Type": "application/json" }
+                    });
+
+                    const data = await response.json();
+                    renderResults(data.results);
+                } catch (err) {
+                    console.error("Connection failed", err);
+                    renderResults([]);
+                }
+            }
+
+            function renderResults(results) {
+                // clear the current static vaults
+                vaultGrid.innerHTML = "";
+
+                const isSearching = searchInput.value.trim().length > 0;
+                
+                //group each contact by their corresponding vaultnumber
+                const groups = {};
+                results.forEach(c => {
+                    if (!groups[c.vaultNumber])
+                        groups[c.vaultNumber] = [];
+                    groups[c.vaultNumber].push(c);
+                });
+
+                if (isSearching) {
+                    //only show vaults that HAVE data
+                    Object.keys(groups).forEach(vNum => {
+                        vaultGrid.innerHTML += renderActives(vNum, groups[vNum]);
+                    });
+                    
+                    //show a "No matches" message if the whole screen is blank
+                    if (results.length === 0) {
+                        vaultGrid.innerHTML = '<div class="col-span-full text-center font-mono text-4xl py-40 opacity-50">NO MATCHING DWELLERS FOUND IN SYSTEM</div>';
+                    }
+                } else {
+                    //show all 10 vaults if there is no ongoing search
+                    for (let i = 1; i <= 10; i++) {
+                        if (groups[i]) {
+                            vaultGrid.innerHTML += renderActives(i, groups[i]);
+                        } else {
+                            vaultGrid.innerHTML += renderEmpties(i);
+                        }
+                    }
+                }
+            }
+
+            // render the active vaults where any search matches the regex
+            function renderActives(vNum, contacts) {
+                let contactList = contacts.map(c => `
+                    <div class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
+                        <span class="font-bold text-lg uppercase">${c.firstName} ${c.lastName}</span>
+                        <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW DATA</span>
+                    </div>
+                `).join("");
+
+                return `
+                    <section class="vault-card">
+                        <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
+                            <span class="font-mono tracking-widest uppercase ml-5">VAULT ${vNum}</span>
+                            <span class="text-xs uppercase px-2 py-0.5 border border-background">Active</span>
+                        </div>
+                        <div class="p-6 space-y-4">${contactList}</div>
+                    </section>`;
+            }
+
+            //render the remaining vaults as empty if there is no search
+            function renderEmpties(vNum) {
+                return `
+                    <section class="vault-card overflow-hidden opacity-70">
+                        <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
+                            <span class="font-mono tracking-widest uppercase ml-5">VAULT ${vNum}</span>
+                            <span class="text-xs uppercase px-2 py-0.5 border border-background">Empty</span>
+                        </div>
+                        <div class="p-6 text-center italic py-10 font-mono">NO DATA RETRIEVED</div>
+                    </section>`;
+            }
         </script>
     </body>
 </html>
