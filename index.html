@@ -228,6 +228,7 @@
                                         id="firstName"
                                         class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-bold tracking-widest"
                                         placeholder="First Name"
+                                        required
                                     />
                                 </div>
                             </div>
@@ -247,6 +248,7 @@
                                         id="lastName"
                                         class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-bold tracking-widest"
                                         placeholder="Last Name"
+                                        required
                                     />
                                 </div>
                             </div>
@@ -266,6 +268,7 @@
                                         id="signupUsername"
                                         class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-bold tracking-widest"
                                         placeholder="Choose username"
+                                        required
                                     />
                                 </div>
                             </div>
@@ -285,6 +288,7 @@
                                         id="signupPassword"
                                         class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-normal"
                                         placeholder="********"
+                                        required
                                     />
                                 </div>
                             </div>
@@ -502,9 +506,12 @@
 
                         // Redirect after a moment
                         setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                            console.log("Redirect to dashboard would happen here");
-                            console.log("User data:", data);
+                            if (isLogin) {
+                                window.location.href = 'dashboard.html';
+                            } else {
+                                isLogin = true;
+                                updateUI();
+                            }
                         }, 1500);
 
                     } catch (error) {
