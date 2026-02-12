@@ -24,8 +24,8 @@
     }else{
         // Search via partial matching
         $search = "%".$match."%";
-        $stmt = $conn->prepare("SELECT * FROM Contacts WHERE (FirstName LIKE ? OR LastName LIKE ?) AND VaultNumber = ?");
-        $stmt->bind_param("ssi", $search, $search, $vaultnum);
+        $stmt = $conn->prepare("SELECT * FROM Contacts WHERE (FirstName LIKE ? OR LastName LIKE ?) AND VaultNumber = ? OR ? = 0");
+        $stmt->bind_param("ssii", $search, $search, $vaultnum, $vaultnum);
         $stmt->execute();
 
         $result = $stmt->get_result();
