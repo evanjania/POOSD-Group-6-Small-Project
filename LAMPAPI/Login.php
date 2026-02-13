@@ -21,7 +21,7 @@
     $inputs = json_decode(file_get_contents('php://input'), true);
 	
     // Create MySQL database connection
-    $connection = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331"); // Update with admin info
+    $connection = new mysqli("localhost", "", "", "");
     if(!$connection->connect_error)
     {
         // Search for user in the database
@@ -31,7 +31,7 @@
 
         // If a user is found, get and send its data
         $response = $query->get_result();
-        if($userInfo = $response->fetch_assoc())// && password_verify($password, $existingHashFromDb) == true)
+        if($userInfo = $response->fetch_assoc())
         {
             $obj = '{"id":'.$userInfo["ID"].',
                      "firstName":"'.$userInfo["FirstName"].'",

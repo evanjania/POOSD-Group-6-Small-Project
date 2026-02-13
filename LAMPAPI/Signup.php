@@ -26,7 +26,7 @@
     }
 	
     // Create MySQL database connection
-    $connection = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331"); // Update with admin info
+    $connection = new mysqli("localhost", "", "", "");
     if(!$connection->connect_error)
     {
         // Search for user in the database
@@ -44,7 +44,6 @@
         else
         {
             // Insert user into database
-            //$hashedPassword = password_hash($inputs["password"], PASSWORD_DEFAULT);
             $query = $connection->prepare("INSERT INTO Users (FirstName, LastName, Login, Password)
                                            VALUES (?,?,?,?);");
             $query->bind_param("ssss", $inputs["firstName"], $inputs["lastName"], $inputs["login"], $inputs["password"]);        
