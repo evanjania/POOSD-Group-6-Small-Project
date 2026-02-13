@@ -456,14 +456,14 @@
 
                         if (isLogin) {
                             // LOGIN
-                            endpoint = "Login.php";
+                            endpoint = "LAMPAPI/Login.php";
                             payload = {
                                 login: document.getElementById("loginUsername").value,
                                 password: document.getElementById("loginPassword").value
                             };
                         } else {
                             // SIGNUP
-                            endpoint = "Signup.php";
+                            endpoint = "LAMPAPI/Signup.php";
                             payload = {
                                 firstName: document.getElementById("firstName").value,
                                 lastName: document.getElementById("lastName").value,
