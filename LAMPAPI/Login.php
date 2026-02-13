@@ -6,7 +6,6 @@
                  "firstName":"",
                  "lastName":"",
                  "dateCreated":"",
-                 "vaultNum":0,
                  "error":"' . $errorMessage . '"}';
         sendResponse($obj);
     }
@@ -22,25 +21,28 @@
     $inputs = json_decode(file_get_contents('php://input'), true);
 	
     // Create MySQL database connection
-    $connection = new mysqli("localhost", "", "", "COP4331"); // Update with admin info
-    if($connection)
+    $connection = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331"); // Update with admin info
+    if(!$connection->connect_error)
     {
         // Search for user in the database
-        $query = $connection->prepare("SELECT ID,firstName,lastName FROM Users WHERE Login=? AND Password =?");
+        $query = $connection->prepare("SELECT ID, FirstName, LastName FROM Users WHERE Login=? AND Password =?");
         $query->bind_param("ss", $inputs["login"], $inputs["password"]);
         $query->execute();
 
         // If a user is found, get and send its data
         $response = $query->get_result();
-        if($userInfo = $response->fetch_assoc())
+        if($userInfo = $response->fetch_assoc())// && password_verify($password, $existingHashFromDb) == true)
         {
             $obj = '{"id":'.$userInfo["ID"].',
-                     "firstName":'.$userInfo["FirstName"].',
-                     "lastName":'.$userInfo["LastName"].',
-                     "dateCreated":'.$userInfo["DateCreated"].',
-                     "vaultNum":'.$userInfo["VaultNumber"].',
+                     "firstName":"'.$userInfo["FirstName"].'",
+                     "lastName":"'.$userInfo["LastName"].'",
+                     "dateCreated":"'.$userInfo["DateCreated"].'",
                      "error":""}';
             sendResponse($obj);
+        }
+        else
+        {
+            sendError("No data to send");
         }
 
         $query->close();
