@@ -463,6 +463,12 @@
                             };
                         } else {
                             // SIGNUP
+                            if (!document.getElementById("firstName").value ||
+                                !document.getElementById("lastName").value ||
+                                !document.getElementById("signupUsername").value ||
+                                !document.getElementById("signupPassword").value) {
+                                throw new Error("All fields are required");
+                            }
                             endpoint = "LAMPAPI/Signup.php";
                             payload = {
                                 firstName: document.getElementById("firstName").value,
@@ -506,6 +512,8 @@
                                 window.location.href = 'dashboard.html';
                             } else {
                                 isLogin = true;
+                                submitBtn.disabled = false;
+                                btnText.innerHTML = "INTIATE LOGIN";
                                 updateUI();
                             }
                         }, 1500);
