@@ -6,7 +6,6 @@
                  "firstName":"",
                  "lastName":"",
                  "dateCreated":"",
-                 "vaultNum":0,
                  "error":"' . $errorMessage . '"}';
         sendResponse($obj);
     }
@@ -20,14 +19,19 @@
     
     // Get new user's first name, last name, login, and password
     $inputs = json_decode(file_get_contents('php://input'), true);
+    if($inputs == null)
+    {
+        sendError("No data");
+        exit();
+    }
 	
     // Create MySQL database connection
-    $connection = new mysqli("localhost", "", "", "COP4331"); // Update with admin info
-    if($connection)
+    $connection = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331"); // Update with admin info
+    if(!$connection->connect_error)
     {
         // Search for user in the database
-        $query = $connection->prepare("SELECT * FROM Users WHERE Login=? AND Password =?");
-        $query->bind_param("ss", $inputs["login"], $inputs["password"]);        
+        $query = $connection->prepare("SELECT * FROM Users WHERE Login=?");
+        $query->bind_param("s", $inputs["login"]);        
         $query->execute();
 
         $response = $query->get_result();
@@ -40,14 +44,14 @@
         else
         {
             // Insert user into database
-            $query = $connection->prepare("insert into Users (FirstName,LastName,Login,Password) VALUES 
-                                          (?,?,?,?);");
+            //$hashedPassword = password_hash($inputs["password"], PASSWORD_DEFAULT);
+            $query = $connection->prepare("INSERT INTO Users (FirstName, LastName, Login, Password)
+                                           VALUES (?,?,?,?);");
             $query->bind_param("ssss", $inputs["firstName"], $inputs["lastName"], $inputs["login"], $inputs["password"]);        
-            $query->execute();
-
-            if(($response = $query->get_result()) == false)
+            
+            if(!$query->execute())
             {
-                sendError("Error adding user's info to database");
+                sendError($query->error);
             }
         }
 
