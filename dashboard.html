@@ -56,7 +56,7 @@
             }
         </style>
     </head>
-    <body class="min-h-screen bg-[url('vault-tec-bg.png')] bg-cover bg-center text-primary font-sans relative items-center justify-center">
+    <body class="min-h-screen bg-[url('vault-tec-bg.png')] bg-cover bg-center bg-fixed text-primary font-sans relative items-center justify-center">
         
         <div class="fixed inset-0 crt-overlay z-50"></div>
         <div class="absolute inset-0 bg-[#447AB9]/80 mix-blend-multiply z-0"></div>
@@ -73,7 +73,7 @@
                     <span class="font-mono text-xl ml-2">&gt; SEARCH_FILTER:</span>
                     <input type="text"
                            id="vaultSearch"
-                           placeholder="ENTER NAME OR VAULT ID..."
+                           placeholder="ENTER NAME..."
                            class="bg-transparent border-b border-primary/20 outline-none flex-1 font-mono text-xl placeholder:opacity-30 focus:border-primary transition-colors">
                 </div>
             </div>
@@ -83,12 +83,22 @@
                             hover:bg-[#fef26599] hover:bg-red-500 hover:text-white uppercase">
                     [ LogOut ]
                 </button>
-                <button class="w-12 h-12 border-2 border-primary rounded-full flex items-center justify-center">
-                </button>
             </div>
         </nav>
       
         <div class="relative z-10 max-w-[55%] mx-auto space-y-8 mt-10">
+            <header class="vault-card p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="items-center gap-4">
+                    <h1 class="text-3xl font-mono tracking-tighter text-glow uppercase">Overseer Directory</h1>
+                </div>
+                
+                <div class="flex gap-4 font-mono">
+                    <button class="px-4 py-1 border border-primary/50 hover:bg-primary hover:text-background transition-all">
+                        [ ADD NEW CONTACT ]
+                    </button>
+                </div>
+            </header>
+            
             <main class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
                 <!--main dashboard where vaults are located-->
 
@@ -110,7 +120,7 @@
             });
 
             document.getElementById("logout").onclick = function () {
-                location.href = "index1.html";
+                location.href = "index.html";
             };
             
             async function doSearch(term) {
@@ -129,7 +139,7 @@
                 //console.log("Terminal Sending:", payload); //for debugging
 
                 try {
-                    const response = await fetch("Search.php", {
+                    const response = await fetch("LAMPAPI/Search.php", {
                         method: "POST",
                         body: JSON.stringify(payload),
                         headers: { "Content-Type": "application/json" }
