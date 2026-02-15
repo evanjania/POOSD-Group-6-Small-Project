@@ -16,7 +16,8 @@
 
     // Save them in variables
     $match = $inputs["search"];
-    $vaultnum = $inputs["vaultnum"]; 
+    $vaultnum = $inputs["vaultnum"];
+    $userID = $inputs["userID"] ?? 0; 
 
     $conn = new mysqli("%", "VaultBook", "POOSD6", "COP4331");
     if($conn->connect_error){
@@ -24,8 +25,8 @@
     }else{
         // Search via partial matching
         $search = "%".$match."%";
-        $stmt = $conn->prepare("SELECT * FROM Contacts WHERE (FirstName LIKE ? OR LastName LIKE ?) AND VaultNumber = ? OR ? = 0");
-        $stmt->bind_param("ssii", $search, $search, $vaultnum, $vaultnum);
+        $stmt = $conn->prepare("SELECT * FROM Contacts WHERE UserID = ? AND (FirstName LIKE ? OR LastName LIKE ?) AND (VaultNumber = ? OR ?=0)");
+        $stmt->bind_param("issii", $userID, $search, $search, $vaultnum, $vaultnum);
         $stmt->execute();
 
         $result = $stmt->get_result();
