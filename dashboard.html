@@ -130,10 +130,12 @@
 
                 const vaultInput = hasVaultFilter ? parseInt(lastPart) : 0;
                 const nameInput = hasVaultFilter ? parts.slice(0, -1).join(" ") : term;
+                const currentUserId = localStorage.getItem("userId");
 
                 const payload = {
                     search: nameInput,
-                    vaultnum: vaultInput
+                    vaultnum: vaultInput,
+                    userID: currentUserId
                 };
 
                 //console.log("Terminal Sending:", payload); //for debugging
