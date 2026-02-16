@@ -64,7 +64,7 @@
         
         <!--navbar-->
         <nav class="sticky bg-black top-0 flex justify-between items-center px-10 py-4 shadow-md z-20">
-            <div class="text-2xl font-bold text-blue-600 text-primary mr-5">
+            <div class="text-2xl font-bold text-glow text-blue-600 text-primary mr-5">
                 VaultBook
             </div>
     
@@ -74,28 +74,52 @@
                     <input type="text"
                            id="vaultSearch"
                            placeholder="ENTER NAME..."
-                           class="bg-transparent border-b border-primary/20 outline-none flex-1 font-mono text-xl placeholder:opacity-30 focus:border-primary transition-colors">
+                           class="bg-transparent border-b border-primary/20 outline-none flex-1 font-mono text-xl placeholder:opacity-30 focus:border-primary transition-colors"
+                    >
                 </div>
             </div>
     
             <div class="flex space gap-5">
                 <button id="logout" class="font-mono px-6 py-1 border border-red-500/50 text-red-500 text-xl transition-all
-                            hover:bg-[#fef26599] hover:bg-red-500 hover:text-white uppercase">
+                            hover:bg-[#fef26599] tracking-tighter hover:bg-red-500 hover:text-white uppercase">
                     [ LogOut ]
                 </button>
             </div>
         </nav>
       
-        <div class="relative z-10 max-w-[55%] mx-auto space-y-8 mt-10">
-            <header class="vault-card p-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="items-center gap-4">
-                    <h1 class="text-3xl font-mono tracking-tighter text-glow uppercase">Overseer Directory</h1>
+        <div class="relative z-10 max-w-[50%] mx-auto space-y-8 mt-10">
+            <header class="flex flex-col">
+                <div class="vault-card flex flex-col md:flex-row p-6 justify-between items-center gap-4">
+                    <div class="items-center gap-4">
+                        <h1 class="text-3xl font-mono tracking-tighter text-glow uppercase">Overseer Directory</h1>
+                    </div>
+                    
+                    <div class="flex gap-4 font-mono">
+                        <button id="add-contact" class="px-4 py-1 border border-primary/50 hover:bg-primary hover:text-background transition-all">
+                            [ ADD NEW CONTACT ]
+                        </button>
+                    </div>
                 </div>
-                
-                <div class="flex gap-4 font-mono">
-                    <button class="px-4 py-1 border border-primary/50 hover:bg-primary hover:text-background transition-all">
-                        [ ADD NEW CONTACT ]
-                    </button>
+                <div id="add-menu" class="hidden z-10 flex justify-center max-w-[85%] mx-auto transition slide">
+                    <div class="flex items-center justify-between gap-20 mx-8 font-mono text-2xl border rounded-b-md border-2 border-primary bg-[#0D0D01]/85 p-6">
+                        <div class="flex flex-col ml-8">
+                            <div>First Name:</div>
+                            <div>Last Name:</div>
+                            <div>E-mail:</div>
+                            <div>Phone:</div>
+                        </div>
+                        <div class="flex flex-col">
+                            <input class="bg-transparent outline-none border-b border-primary" placeholder="First Name" >
+                            <input class="bg-transparent outline-none border-b border-primary" placeholder="Last Name" >
+                            <input class="bg-transparent outline-none border-b border-primary" placeholder="E-mail" >
+                            <input class="bg-transparent outline-none border-b border-primary" placeholder="Phone" >
+                        </div>
+                        <button id="submit-btn"
+                                class="border border-4 border-[#56A871] text-[#56A871] bg-[#26472C]/60 px-6 py-2 mr-8
+                                       transition delay-100 duration-300 ease-in-out hover:scale-105">
+                                Submit
+                        </button>
+                    </div>
                 </div>
             </header>
             
@@ -105,24 +129,169 @@
             </main>
         </div>
         <script>
-            // if the search bar is empty, show all vaults again
             const searchInput = document.getElementById('vaultSearch');
             const vaultGrid = document.querySelector('main.grid');
 
+            const addContact = document.getElementById('add-contact');
+            const addMenu = document.getElementById('add-menu');
+            const submitBtn = document.getElementById('submit-btn');
+            const addInputs = addMenu.querySelectorAll('input');
+           
             document.addEventListener("DOMContentLoaded", () => {
                 // run an empty search if there is no input yet
                 doSearch(""); 
             });
             
+            //run the searching with the text user puts
             searchInput.addEventListener("input", (e) => {
                 const searchText = e.target.value;
                 doSearch(searchText);
             });
+            
+            //pop up the Add Contact Menu, focus on the first input
+            addContact.addEventListener("click", (e) =>{
+                e.stopPropagation();
+                addMenu.classList.remove('hidden');
+                addInputs[0].focus();
+            });
+            //if clicked outside of the Add Contact Menu or the button, hide
+            document.addEventListener('click',(e)=>{
+                const isButton = addContact.contains(e.target);
+                const isMenu = addMenu.contains(e.target);
 
+                if(!isButton && !isMenu){
+                    addMenu.classList.add('hidden');
+                }
+            });
+
+            //run the function if user clicks on submit
+            submitBtn.addEventListener('click', submitNewContact);
+
+            //enable the enter only when the menu is on
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !addMenu.classList.contains('hidden')) {
+                    submitNewContact();
+                }
+            });
+
+            //function that adds the new contact
+            async function submitNewContact(){
+                const payload = {
+                    firstName: addInputs[0].value.trim(),
+                    lastName: addInputs[1].value.trim(),
+                    email: addInputs[2].value.trim(),
+                    phone: addInputs[3].value.trim(),
+                    userID: localStorage.getItem('userId')
+                }
+
+                if(!payload.firstName || !payload.lastName){
+                    alert("First and Last Name are required.")
+                    return;
+                }
+
+                try{
+                    const response = await fetch('AddContacts.php',{
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+
+                    if(data.error === ""){
+                        addInputs.forEach(input => input.value = "");
+                        addMenu.classList.add('hidden');
+                        setTimeout(() => {
+                            doSearch("");
+                        }, 500);
+                    }else{
+                        console.error("System Error:",data.error);
+                    }
+                }catch(err){
+                    console.error("Failed Connection:", err);
+                }
+            }
+
+            // logout
             document.getElementById("logout").onclick = function () {
                 location.href = "index.html";
             };
+            ////////////////////////////////////////////////////////
+
+            //change the details pane if the user clicks on EDIT
+            function openEditMenu(c, buttonElement) {
+                const detailsPane = buttonElement.closest('.details-pane');
+                const infoGrid = detailsPane.querySelector('.grid');
+                const deleteBtn = detailsPane.querySelector('#delete-btn');
+                
+                if (!infoGrid.hasAttribute('data-original')) {
+                    infoGrid.setAttribute('data-original', infoGrid.innerHTML);
+                }
+
+                infoGrid.innerHTML = `
+                    <div class="flex flex-col gap-2 font-mono">
+                        <div class="flex gap-2">FIRST: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-first-${c.ID}" value="${c.firstName}"></div>
+                        <div class="flex gap-2">LAST:  <input class="bg-primary/10 border-b border-primary outline-none" id="edit-last-${c.ID}" value="${c.lastName}"></div>
+                        <div class="flex gap-2">PHONE: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-phone-${c.ID}" value="${c.phone}"></div>
+                        <div class="flex gap-2">EMAIL: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-email-${c.ID}" value="${c.email}"></div>
+                    </div>
+                `;
+                
+                //change the functionality of the buttons
+                buttonElement.innerText = "SAVE";
+                buttonElement.classList.replace('bg-white/25', 'bg-green-500/40');
+                buttonElement.onclick = () => saveEdit(c.ID, buttonElement);
+                
+                deleteBtn.innerText = "CANCEL";
+                deleteBtn.classList.replace('text-red-500', 'text-yellow-500');
+                deleteBtn.classList.replace('border-red-400', 'border-yellow-400');
+                deleteBtn.onclick = () => closeEditMenu(c, buttonElement);
+            }
+                        // function that runs when the user clicks CANCEL
+            function closeEditMenu(contact, buttonElement) {
+                const detailsPane = buttonElement.closest('.details-pane');
+                const infoGrid = detailsPane.querySelector('.grid');
+                const deleteBtn = detailsPane.querySelector('#delete-btn');
+                
+                infoGrid.innerHTML = infoGrid.getAttribute('data-original');
+                infoGrid.removeAttribute('data-original');
+                
+                buttonElement.innerText = "EDIT";
+                buttonElement.classList.replace('bg-green-500/40', 'bg-white/25');
+                buttonElement.onclick = () => openEditMenu(contact, buttonElement);
+                
+                deleteBtn.innerText = "DELETE";
+                deleteBtn.classList.replace('text-yellow-500', 'text-red-500');
+                deleteBtn.classList.replace('border-yellow-400', 'border-red-400');
+                deleteBtn.onclick = () => deleteContact(contact.ID);
+            }
+            ///////////////////////////////////////////////////////
+
+            //function that deletes the contact
+            async function deleteContact(id) {
+                if (!confirm("Are you sure you want to remove this dweller from the directory?")) return;
+
+                const payload = {
+                    id: id,
+                    userID: localStorage.getItem('userId')
+                };
+
+                try {
+                    const response = await fetch('DeleteContact.php', {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await response.json();
+                    if (data.error === "") {
+                        doSearch("");
+                    }
+                } catch (err) {
+                    console.error("Delete failed!", err);
+                }
+            }
             
+            // the 'main' function that keeps running
             async function doSearch(term) {
                 const parts = term.trim().split(" ");
                 const lastPart = parts[parts.length - 1];
@@ -130,18 +299,17 @@
 
                 const vaultInput = hasVaultFilter ? parseInt(lastPart) : 0;
                 const nameInput = hasVaultFilter ? parts.slice(0, -1).join(" ") : term;
-                const currentUserId = localStorage.getItem("userId");
 
                 const payload = {
                     search: nameInput,
                     vaultnum: vaultInput,
-                    userID: currentUserId
+                    userID: localStorage.getItem("userId")
                 };
 
                 //console.log("Terminal Sending:", payload); //for debugging
 
                 try {
-                    const response = await fetch("LAMPAPI/Search.php", {
+                    const response = await fetch("Search.php", {
                         method: "POST",
                         body: JSON.stringify(payload),
                         headers: { "Content-Type": "application/json" }
@@ -197,12 +365,22 @@
                     <div class="flex flex-col">
                         <div onclick="toggleDetails(this)" class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
                             <span class="font-bold text-lg uppercase">${c.firstName} ${c.lastName}</span>
-                            <span class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">&gt; VIEW DATA</span>
+                            <div class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="inline-block transition-transform duration-25">></span>
+                                <span class="">VIEW DATA</span>
+                            </div>
+                            
                         </div>
-                        <div class="details-pane hidden grid grid-cols-1 p-3 bg-black/70 border-t border-primary/10">
-                            <span class="font-mono uppercase opacity-80">UserID: ${c.userID}</span>
-                            <span class="font-mono uppercase opacity-80">Phone: ${c.phone}</span>
-                            <span class="font-mono uppercase opacity-80">Email: ${c.email}</span>
+                        <div class="details-pane flex flex-col md:flex-row hidden justify-between p-3 bg-black/70 border-t border-primary/10">
+                            <div class="grid grid-cols-1 ">
+                                <span class="font-mono uppercase opacity-80">UserID: ${c.userID}</span>
+                                <span class="font-mono uppercase opacity-80">Phone: ${c.phone}</span>
+                                <span class="font-mono uppercase opacity-80">Email: ${c.email}</span>
+                            </div>
+                            <div class="flex flex-row md:flex-col gap-3 justify-center mt-3 md:mr-5 md:mt-0 font-mono">
+                                <button onclick="openEditMenu(${JSON.stringify(c).replace(/"/g, '&quot;')}, this)" class="border border-gray-400 bg-white/25 text-white py-1 px-2">EDIT</button>
+                                <button id="delete-btn" onclick="deleteContact(${c.id})" class="border border-red-400 bg-red-500/30 text-red-500 py-1 px-2">DELETE</button>
+                            </div>
                         </div>    
                     </div>
                 `).join("");
@@ -233,9 +411,12 @@
             function toggleDetails(element){
                 const details = element.nextElementSibling;
                 details.classList.toggle('hidden');
-                const btn = element.querySelector('span:last-child');
+                const wrapper = element.querySelector('.font-mono');
+                const rotator = wrapper.querySelector('span:first-child');
+                const label = wrapper.querySelector('span:last-child');
 
-                btn.innerHTML = details.classList.contains('hidden') ? '> VIEW DATA' : '> HIDE DATA';
+                rotator.classList.toggle('rotate-90');
+                label.innerHTML = details.classList.contains('hidden') ? 'VIEW DATA' : 'HIDE DATA';
             }
         </script>
     </body>
