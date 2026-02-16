@@ -17,9 +17,9 @@
 		echo $jsonObj;
     }
     
-    // Get user's login and password
+    // Get username and password
     $inputs = json_decode(file_get_contents('php://input'), true);
-	
+    
     // Create MySQL database connection
     $connection = new mysqli("localhost", "", "", "");
     if(!$connection->connect_error)
@@ -42,7 +42,7 @@
         }
         else
         {
-            sendError("No data to send");
+            sendError("Invalid username or password");
         }
 
         $query->close();
