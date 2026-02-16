@@ -48,7 +48,16 @@
                                            VALUES (?,?,?,?);");
             $query->bind_param("ssss", $inputs["firstName"], $inputs["lastName"], $inputs["login"], $inputs["password"]);        
             
-            if(!$query->execute())
+            if($query->execute())
+            {
+                $obj = '{"id":0,
+                 "firstName":"'.$inputs["firstName"].'",
+                 "lastName":"'.$inputs["lastName"].'",
+                 "dateCreated":"",
+                 "error":""}';
+                 sendResponse($obj);
+            }
+            else
             {
                 sendError($query->error);
             }
