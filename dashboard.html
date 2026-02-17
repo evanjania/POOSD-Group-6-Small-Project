@@ -103,10 +103,10 @@
                 <div id="add-menu" class="hidden z-10 flex justify-center max-w-[85%] mx-auto transition slide">
                     <div class="flex items-center justify-between gap-12 mx-8 font-mono text-2xl border rounded-b-md border-2 border-primary bg-[#0D0D01]/85 p-6">
                         <div class="flex flex-col ml-6">
-                            <div>First:</div>
-                            <div>Last:</div>
+                            <div>First: </div>
+                            <div>Last: </div>
                             <div>E-mail:</div>
-                            <div>Phone:</div>
+                            <div>Phone: </div>
                         </div>
                         <div class="flex flex-col">
                             <input class="bg-transparent outline-none border-b border-primary" placeholder="First Name" >
@@ -190,7 +190,7 @@
                 }
 
                 try{
-                    const response = await fetch('AddContacts.php',{
+                    const response = await fetch('LAMPAPI/AddContacts.php',{
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify(payload)
@@ -212,6 +212,100 @@
                 }
             }
 
+
+// deletes a contact by ID for the logged-in user
+            async function deleteContact(contactID) {
+                const userID = localStorage.getItem("userId");
+
+                if (!userID) {
+                    alert("Not logged in (missing userId).");
+                    return;
+                }
+
+                const ok = confirm("Delete this contact?");
+                if (!ok) return;
+
+                const payload = {
+                    contactID: contactID,
+                    userID: parseInt(userID, 10)
+                };
+
+                try {
+                    const response = await fetch("LAMPAPI/DeleteContacts.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error === "") {
+                        // refresh results (keep current search text)
+                        doSearch(searchInput.value || "");
+                    } else {
+                        console.error("Delete failed:", data.error);
+                        alert("Delete failed: " + data.error);
+                    }
+                } catch (err) {
+                    console.error("Delete connection failed:", err);
+                    alert("Connection error while deleting.");
+                }
+            }
+
+
+            async function saveEdit(contact, buttonElement) {
+                const userID = localStorage.getItem("userId");
+                if (!userID) {
+                    alert("Not logged in (missing userId).");
+                    return;
+                }
+
+                // Read edited values from the inputs you created in openEditMenu()
+                const firstName = document.getElementById(`edit-first-${contact.ID}`).value.trim();
+                const lastName  = document.getElementById(`edit-last-${contact.ID}`).value.trim();
+                const phone     = document.getElementById(`edit-phone-${contact.ID}`).value.trim();
+                const email     = document.getElementById(`edit-email-${contact.ID}`).value.trim();
+
+                if (!firstName || !lastName) {
+                    alert("First and Last Name are required.");
+                    return;
+                }
+
+                // IMPORTANT: vaultNumber must exist on the contact from Search.php
+                const payload = {
+                    contactID: contact.ID,
+                    userID: parseInt(userID, 10),
+                    firstName,
+                    lastName,
+                    phone,
+                    email,
+                    vaultNumber: parseInt(contact.vaultNumber, 10) || 0
+                };
+
+                try {
+                    const response = await fetch("LAMPAPI/EditContacts.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error === "") {
+                        // refresh list and close edit mode cleanly
+                        await doSearch(searchInput.value || "");
+                    } else {
+                        console.error("Edit failed:", data.error);
+                        alert("Edit failed: " + data.error);
+                    }
+                } catch (err) {
+                    console.error("Edit connection failed:", err);
+                    alert("Connection error while saving edit.");
+                }
+            }
+
+
+
             // logout
             document.getElementById("logout").onclick = function () {
                 location.href = "index.html";
@@ -222,7 +316,7 @@
             function openEditMenu(c, buttonElement) {
                 const detailsPane = buttonElement.closest('.details-pane');
                 const infoGrid = detailsPane.querySelector('.grid');
-                const deleteBtn = detailsPane.querySelector('#delete-btn');
+                const deleteBtn = detailsPane.querySelector('.delete-btn');
                 
                 if (!infoGrid.hasAttribute('data-original')) {
                     infoGrid.setAttribute('data-original', infoGrid.innerHTML);
@@ -240,7 +334,7 @@
                 //change the functionality of the buttons
                 buttonElement.innerText = "SAVE";
                 buttonElement.classList.replace('bg-white/25', 'bg-green-500/40');
-                buttonElement.onclick = () => saveEdit(c.ID, buttonElement);
+                buttonElement.onclick = () => saveEdit(c, buttonElement);
                 
                 deleteBtn.innerText = "CANCEL";
                 deleteBtn.classList.replace('text-red-500', 'text-yellow-500');
@@ -251,7 +345,7 @@
             function closeEditMenu(contact, buttonElement) {
                 const detailsPane = buttonElement.closest('.details-pane');
                 const infoGrid = detailsPane.querySelector('.grid');
-                const deleteBtn = detailsPane.querySelector('#delete-btn');
+                const deleteBtn = detailsPane.querySelector('.delete-btn');
                 
                 infoGrid.innerHTML = infoGrid.getAttribute('data-original');
                 infoGrid.removeAttribute('data-original');
@@ -266,30 +360,6 @@
                 deleteBtn.onclick = () => deleteContact(contact.ID);
             }
             ///////////////////////////////////////////////////////
-
-            //function that deletes the contact
-            async function deleteContact(id) {
-                if (!confirm("Are you sure you want to remove this dweller from the directory?")) return;
-
-                const payload = {
-                    id: id,
-                    userID: localStorage.getItem('userId')
-                };
-
-                try {
-                    const response = await fetch('DeleteContact.php', {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
-                    const data = await response.json();
-                    if (data.error === "") {
-                        doSearch("");
-                    }
-                } catch (err) {
-                    console.error("Delete failed!", err);
-                }
-            }
             
             // the 'main' function that keeps running
             async function doSearch(term) {
@@ -309,7 +379,7 @@
                 //console.log("Terminal Sending:", payload); //for debugging
 
                 try {
-                    const response = await fetch("Search.php", {
+                    const response = await fetch("LAMPAPI/Search.php", {
                         method: "POST",
                         body: JSON.stringify(payload),
                         headers: { "Content-Type": "application/json" }
@@ -379,7 +449,7 @@
                             </div>
                             <div class="flex flex-row md:flex-col gap-3 justify-center mt-3 md:mr-5 md:mt-0 font-mono">
                                 <button onclick="openEditMenu(${JSON.stringify(c).replace(/"/g, '&quot;')}, this)" class="border border-gray-400 bg-white/25 text-white py-1 px-2">EDIT</button>
-                                <button id="delete-btn" onclick="deleteContact(${c.id})" class="border border-red-400 bg-red-500/30 text-red-500 py-1 px-2">DELETE</button>
+                                <button class="delete-btn border border-red-400 bg-red-500/30 text-red-500 py-1 px-2" onclick="deleteContact(${c.ID})">DELETE</button>
                             </div>
                         </div>    
                     </div>
