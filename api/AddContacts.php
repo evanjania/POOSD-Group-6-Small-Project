@@ -6,6 +6,12 @@
         sendResponse($obj);
     }
     
+    function sendResponse($obj)
+    {
+        header('Content-type: application/json');
+        echo $obj;
+    }
+    
     // Get user's username, contact's first name, last name, phone, email
     $inputs = json_decode(file_get_contents('php://input'), true);
     
@@ -21,11 +27,12 @@
         $query = $connection->prepare("INSERT INTO Contacts (FirstName,Lastname,Phone,Email,UserID)
                                         VALUES  (?,?,?,?,?);");
         $query->bind_param("ssssi", $inputs["firstName"], $inputs["lastName"], 
-                            $inputs["email"], $inputs["phone"], $inputs["userID"]);        
+                             $inputs["phone"], $inputs["email"], $inputs["userID"]);        
 
         if($query->execute())
         {
-            sendError("");
+            sendResponse('{"error":"", 
+                                    "response":"Added Contact"}');
         }
         else
         {
