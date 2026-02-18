@@ -16,17 +16,17 @@
 
     // Save them in variables
     $match = $inputs["search"];
-    $vaultnum = $inputs["vaultnum"];
-    $userID = $inputs["userID"] ?? 0; 
+    $vaultnum = $inputs["vaultnum"]; 
+    $userID = $inputs["userID"] ?? 0;
 
-    $conn = new mysqli("%", "VaultBook", "POOSD6", "COP4331");
+    $conn = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331");
     if($conn->connect_error){
         sendError($conn->connect_error);
     }else{
         // Search via partial matching
-        $search = "%".$match."%";
-        $stmt = $conn->prepare("SELECT * FROM Contacts WHERE UserID = ? AND (FirstName LIKE ? OR LastName LIKE ?) AND (VaultNumber = ? OR ?=0)");
-        $stmt->bind_param("issii", $userID, $search, $search, $vaultnum, $vaultnum);
+	$search = "%".$match."%";
+	$stmt = $conn->prepare( "SELECT * FROM Contacts WHERE UserID = ? AND (FirstName LIKE ? OR LastName  LIKE ? OR CONCAT(FirstName, ' ', LastName) LIKE ? OR CONCAT(LastName,  ' ', FirstName) LIKE ?) AND (VaultNumber = ? OR ? = 0)");
+        $stmt->bind_param("issssii", $userID, $search, $search, $search, $search, $vaultnum, $vaultnum);       
         $stmt->execute();
 
         $result = $stmt->get_result();
@@ -41,7 +41,7 @@
             $searchCount++;
             // Append all of the results in a variable
             $searchResults .= '{"id":"' . $row["ID"]
-                            . '",firstName":"' . $row["FirstName"] 
+                            . '", "firstName":"' . $row["FirstName"] 
                             . '", "lastName":"' . $row["LastName"]
                             . '", "phone":"'. $row["Phone"]
                             . '", "email":"' . $row["Email"]
