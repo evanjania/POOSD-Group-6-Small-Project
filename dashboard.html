@@ -103,10 +103,10 @@
                 <div id="add-menu" class="hidden z-10 flex justify-center max-w-[85%] mx-auto transition slide">
                     <div class="flex items-center justify-between gap-12 mx-8 font-mono text-2xl border rounded-b-md border-2 border-primary bg-[#0D0D01]/85 p-6">
                         <div class="flex flex-col ml-6">
-                            <div>First: </div>
-                            <div>Last: </div>
+                            <div>First:</div>
+                            <div>Last:</div>
                             <div>E-mail:</div>
-                            <div>Phone: </div>
+                            <div>Phone:</div>
                         </div>
                         <div class="flex flex-col">
                             <input class="bg-transparent outline-none border-b border-primary" placeholder="First Name" >
@@ -123,7 +123,7 @@
                 </div>
             </header>
             
-            <main class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+            <main class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
                 <!--main dashboard where vaults are located-->
 
             </main>
@@ -203,7 +203,7 @@
                         addMenu.classList.add('hidden');
                         setTimeout(() => {
                             doSearch("");
-                        }, 500);
+                        }, 200);
                     }else{
                         console.error("System Error:",data.error);
                     }
@@ -211,100 +211,6 @@
                     console.error("Failed Connection:", err);
                 }
             }
-
-
-// deletes a contact by ID for the logged-in user
-            async function deleteContact(contactID) {
-                const userID = localStorage.getItem("userId");
-
-                if (!userID) {
-                    alert("Not logged in (missing userId).");
-                    return;
-                }
-
-                const ok = confirm("Delete this contact?");
-                if (!ok) return;
-
-                const payload = {
-                    contactID: contactID,
-                    userID: parseInt(userID, 10)
-                };
-
-                try {
-                    const response = await fetch("LAMPAPI/DeleteContacts.php", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const data = await response.json();
-
-                    if (data.error === "") {
-                        // refresh results (keep current search text)
-                        doSearch(searchInput.value || "");
-                    } else {
-                        console.error("Delete failed:", data.error);
-                        alert("Delete failed: " + data.error);
-                    }
-                } catch (err) {
-                    console.error("Delete connection failed:", err);
-                    alert("Connection error while deleting.");
-                }
-            }
-
-
-            async function saveEdit(contact, buttonElement) {
-                const userID = localStorage.getItem("userId");
-                if (!userID) {
-                    alert("Not logged in (missing userId).");
-                    return;
-                }
-
-                // Read edited values from the inputs you created in openEditMenu()
-                const firstName = document.getElementById(`edit-first-${contact.ID}`).value.trim();
-                const lastName  = document.getElementById(`edit-last-${contact.ID}`).value.trim();
-                const phone     = document.getElementById(`edit-phone-${contact.ID}`).value.trim();
-                const email     = document.getElementById(`edit-email-${contact.ID}`).value.trim();
-
-                if (!firstName || !lastName) {
-                    alert("First and Last Name are required.");
-                    return;
-                }
-
-                // IMPORTANT: vaultNumber must exist on the contact from Search.php
-                const payload = {
-                    contactID: contact.ID,
-                    userID: parseInt(userID, 10),
-                    firstName,
-                    lastName,
-                    phone,
-                    email,
-                    vaultNumber: parseInt(contact.vaultNumber, 10) || 0
-                };
-
-                try {
-                    const response = await fetch("LAMPAPI/EditContacts.php", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const data = await response.json();
-
-                    if (data.error === "") {
-                        // refresh list and close edit mode cleanly
-                        await doSearch(searchInput.value || "");
-                    } else {
-                        console.error("Edit failed:", data.error);
-                        alert("Edit failed: " + data.error);
-                    }
-                } catch (err) {
-                    console.error("Edit connection failed:", err);
-                    alert("Connection error while saving edit.");
-                }
-            }
-
-
 
             // logout
             document.getElementById("logout").onclick = function () {
@@ -316,7 +222,7 @@
             function openEditMenu(c, buttonElement) {
                 const detailsPane = buttonElement.closest('.details-pane');
                 const infoGrid = detailsPane.querySelector('.grid');
-                const deleteBtn = detailsPane.querySelector('.delete-btn');
+                const deleteBtn = detailsPane.querySelector('#delete-btn');
                 
                 if (!infoGrid.hasAttribute('data-original')) {
                     infoGrid.setAttribute('data-original', infoGrid.innerHTML);
@@ -324,28 +230,65 @@
 
                 infoGrid.innerHTML = `
                     <div class="flex flex-col gap-2 font-mono">
-                        <div class="flex gap-2">FIRST: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-first-${c.ID}" value="${c.firstName}"></div>
-                        <div class="flex gap-2">LAST:  <input class="bg-primary/10 border-b border-primary outline-none" id="edit-last-${c.ID}" value="${c.lastName}"></div>
-                        <div class="flex gap-2">PHONE: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-phone-${c.ID}" value="${c.phone}"></div>
-                        <div class="flex gap-2">EMAIL: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-email-${c.ID}" value="${c.email}"></div>
+                        <div class="flex gap-2">FIRST: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-first-${c.id}" value="${c.firstName}"></div>
+                        <div class="flex gap-2">LAST:  <input class="bg-primary/10 border-b border-primary outline-none" id="edit-last-${c.id}" value="${c.lastName}"></div>
+                        <div class="flex gap-2">PHONE: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-phone-${c.id}" value="${c.phone}"></div>
+                        <div class="flex gap-2">EMAIL: <input class="bg-primary/10 border-b border-primary outline-none" id="edit-email-${c.id}" value="${c.email}"></div>
                     </div>
                 `;
                 
                 //change the functionality of the buttons
                 buttonElement.innerText = "SAVE";
                 buttonElement.classList.replace('bg-white/25', 'bg-green-500/40');
-                buttonElement.onclick = () => saveEdit(c, buttonElement);
+                buttonElement.onclick = () => saveEdit(c.id, buttonElement);
                 
                 deleteBtn.innerText = "CANCEL";
                 deleteBtn.classList.replace('text-red-500', 'text-yellow-500');
                 deleteBtn.classList.replace('border-red-400', 'border-yellow-400');
                 deleteBtn.onclick = () => closeEditMenu(c, buttonElement);
             }
-                        // function that runs when the user clicks CANCEL
+            /////////////////////////////////////////////////////
+            async function saveEdit(contactId, buttonElement) {
+                const payload = {
+                    id: contactId,
+                    userID: localStorage.getItem('userId'),
+                    firstName: document.getElementById(`edit-first-${contactId}`).value,
+                    lastName: document.getElementById(`edit-last-${contactId}`).value,
+                    phone: document.getElementById(`edit-phone-${contactId}`).value,
+                    email: document.getElementById(`edit-email-${contactId}`).value,
+                };
+
+                if(!payload.firstName || !payload.lastName){
+                    alert("First and Last Name are required.")
+                    return;
+                }
+
+                try {
+                    const response = await fetch('LAMPAPI/EditContacts.php', {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const data = await response.json();
+                    if (data.error === "") {
+                        setTimeout(()=>{
+                            doSearch("");
+                        }, 200);
+                         // Refresh the grid to show new info
+                    } else {
+                        alert("Database Error: " + data.error);
+                    }
+                } catch (err) {
+                    console.error("Update failed", err);
+                }
+            }
+            
+            // function that runs when the user clicks CANCEL
             function closeEditMenu(contact, buttonElement) {
                 const detailsPane = buttonElement.closest('.details-pane');
                 const infoGrid = detailsPane.querySelector('.grid');
-                const deleteBtn = detailsPane.querySelector('.delete-btn');
+                const deleteBtn = detailsPane.querySelector('#delete-btn');
                 
                 infoGrid.innerHTML = infoGrid.getAttribute('data-original');
                 infoGrid.removeAttribute('data-original');
@@ -359,7 +302,34 @@
                 deleteBtn.classList.replace('border-yellow-400', 'border-red-400');
                 deleteBtn.onclick = () => deleteContact(contact.ID);
             }
-            ///////////////////////////////////////////////////////
+
+            //function that deletes the contact
+            async function deleteContact(id) {
+                if (!confirm("Are you sure you want to remove this dweller from the directory?")) return;
+
+                const payload = {
+                    id: id,
+                    userID: localStorage.getItem('userId')
+                };
+
+                console.log("Payload: ", payload);
+
+                try {
+                    const response = await fetch('LAMPAPI/DeleteContacts.php', {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await response.json();
+                    if (data.error === "") {
+                        setTimeout(() =>{
+                            doSearch("");
+                        },200);
+                    }
+                } catch (err) {
+                    console.error("Delete failed!", err);
+                }
+            }
             
             // the 'main' function that keeps running
             async function doSearch(term) {
@@ -436,7 +406,7 @@
                         <div onclick="toggleDetails(this)" class="flex items-center justify-between p-3 border border-primary/20 hover:bg-primary/5 group cursor-pointer">
                             <span class="font-bold text-lg uppercase">${c.firstName} ${c.lastName}</span>
                             <div class="font-mono opacity-0 group-hover:opacity-100 transition-opacity">
-                                <span class="inline-block transition-transform duration-25">></span>
+                                <span class="inline-block transition-transform duration-10">></span>
                                 <span class="">VIEW DATA</span>
                             </div>
                             
@@ -449,14 +419,14 @@
                             </div>
                             <div class="flex flex-row md:flex-col gap-3 justify-center mt-3 md:mr-5 md:mt-0 font-mono">
                                 <button onclick="openEditMenu(${JSON.stringify(c).replace(/"/g, '&quot;')}, this)" class="border border-gray-400 bg-white/25 text-white py-1 px-2">EDIT</button>
-                                <button class="delete-btn border border-red-400 bg-red-500/30 text-red-500 py-1 px-2" onclick="deleteContact(${c.ID})">DELETE</button>
+                                <button id="delete-btn" onclick="deleteContact(${c.id})" class="border border-red-400 bg-red-500/30 text-red-500 py-1 px-2">DELETE</button>
                             </div>
                         </div>    
                     </div>
                 `).join("");
 
                 return `
-                    <section class="vault-card">
+                    <section class="vault-card mb-10">
                         <div class="bg-primary text-background p-3 font-bold flex justify-between items-center">
                             <span class="font-mono tracking-widest uppercase ml-5">VAULT ${vNum}</span>
                             <span class="text-xs uppercase px-2 py-0.5 border border-background">Active</span>
