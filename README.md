@@ -67,6 +67,7 @@ vaultbook/
 │   ├── photo assets
 │   ├── css/
 │   └── js/
+│   ├── database.sql
 ├── README.md
 ├── LICENSE.md
 └── .gitignore
