@@ -9,7 +9,7 @@ A Fallout-inspired contact management web application built on the LAMP stack. V
 | Team Member     | Project Role      | Contact                                        |
 |-----------------|-------------------|------------------------------------------------|
 | Evan Jania      | PM / Front End    | evanjania@gmail.com / 386-451-2488             |
-| Logan Elkins    | API               | loganelkins0101@gmail.com                      |
+| Logan Elkins    | API               | loganelkins0101@gmail.com / 321-312-7314       |
 | Kevin Estrada   | Database          | kevinkevin2796@gmail.com / 407-953-6630        |
 | Siddanth Rajan  | Backend           | sid.rajan1323@gmail.com                        |
 | Erkan Altundal  | API / Front End   | erkankerem532@gmail.com                        |
@@ -45,6 +45,7 @@ VaultBook is a full-stack web application themed around the Fallout universe. Af
 - **GitHub** - Version control, development workflow and code review for the team
 - **Discord** - Communication, team meetings, and document sharing
 - **SwaggerHub** - API Documentation
+- **Postman** - API testing
 - **FileZilla** - Organization, downloading, and deleting files within the server.
 
 ---
@@ -130,6 +131,7 @@ https://vaultbook.org/
 - Passwords are stored in plain text. This is a course project and is **not intended for production use**. Password hashing should be implemented before any real-world deployment.
 - The application is designed for a single-user-per-account contact list — contacts are linked to the logged-in user's ID.
 - The app is optimized for desktop browsers.
+- The vault numbers assigned to contacts are random and unrelated to the inputted information.
 
 ---
 
