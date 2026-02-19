@@ -378,6 +378,18 @@
             const firstNameInput = document.getElementById("firstName");
             const errorContainer = document.getElementById("errorContainer");
 
+
+
+	    function setInputsEnabled(containerEl, enabled) {
+  	        const inputs = containerEl.querySelectorAll("input");
+  	        inputs.forEach((inp) => {
+    	    	    inp.disabled = !enabled;
+    	            inp.required = enabled;
+  	        });
+	    }
+
+
+
             let isLogin = true;
 
             // Function to show error message
@@ -435,7 +447,14 @@
 
                     // Focus
                     firstNameInput.focus();
+    
                 }
+
+		setInputsEnabled(loginFields, isLogin);
+		setInputsEnabled(signupFields, !isLogin);
+
+
+
             }
 
             // Form Submission
@@ -456,7 +475,7 @@
 
                         if (isLogin) {
                             // LOGIN
-                            endpoint = "LAMPAPI/Login.php";
+                            endpoint = "/LAMPAPI/Login.php";
                             payload = {
                                 login: document.getElementById("loginUsername").value,
                                 password: document.getElementById("loginPassword").value
@@ -469,7 +488,7 @@
                                 !document.getElementById("signupPassword").value) {
                                 throw new Error("All fields are required");
                             }
-                            endpoint = "LAMPAPI/Signup.php";
+                            endpoint = "/LAMPAPI/Signup.php";
                             payload = {
                                 firstName: document.getElementById("firstName").value,
                                 lastName: document.getElementById("lastName").value,
@@ -499,11 +518,11 @@
                             ? "ACCESS GRANTED"
                             : "PROFILE CREATED";
 
-                        // Store user data in sessionStorage if login was successful
+                        // Store user data in localStorage if login was successful
                         if (isLogin) {
-                            sessionStorage.setItem("userId", data.id);
-                            sessionStorage.setItem("firstName", data.firstName);
-                            sessionStorage.setItem("lastName", data.lastName);
+                            localStorage.setItem("userId", data.id);
+                            localStorage.setItem("firstName", data.firstName);
+                            localStorage.setItem("lastName", data.lastName);
                         }
 
                         // Redirect after a moment
@@ -527,6 +546,7 @@
                         submitBtn.disabled = false;
                     }
                 });
+	    updateUI();
         </script>
     </body>
 </html>
