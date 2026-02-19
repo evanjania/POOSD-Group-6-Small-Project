@@ -46,7 +46,8 @@
                             . '", "phone":"'. $row["Phone"]
                             . '", "email":"' . $row["Email"]
                             . '", "userID":"'. $row["UserID"]
-                            . '", "vaultNumber":"' . $row["VaultNumber"] . '"}';
+                            . '", "vaultNumber":"' . $row["VaultNumber"]
+                            . '", "dateCreated":"' . $row["DateCreated"]. '"}';
         }  
 
         // If no results, send an error message
