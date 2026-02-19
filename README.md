@@ -57,10 +57,14 @@ vaultbook/
 ├── api/                  # PHP backend API endpoints
 │   ├── Login.php
 │   ├── Signup.php
-│   └── (other endpoints)
+│   ├── EditContacts.php
+│   ├── AddContacts.php
+│   ├── DeleteContacts.php
+│   └──  Search.php   
 ├── public/               # Frontend files served by Apache
 │   ├── index.html        # Login / Register page
 │   ├── dashboard.html    # Overseer's Directory
+│   ├── photo assets
 │   ├── css/
 │   └── js/
 ├── README.md
