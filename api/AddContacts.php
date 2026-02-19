@@ -16,7 +16,7 @@
     $inputs = json_decode(file_get_contents('php://input'), true);
     
     // Create MySQL database connection
-    $connection = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331"); // Update with admin info
+    $connection = new mysqli("localhost", "", "", "");
     if($connection->connect_error)
     {
         sendError($connection->connect_error);
