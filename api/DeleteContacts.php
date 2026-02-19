@@ -25,8 +25,8 @@
     $contactID = intval($inputs["contactID"]);
     $userID    = intval($inputs["userID"]);
 
-    // Create MySQL database connection (same as AddContacts.php)
-    $connection = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331");
+    // Create MySQL database connection
+    $connection = new mysqli("localhost", "", "", "");
     if ($connection->connect_error)
     {
         sendError($connection->connect_error);

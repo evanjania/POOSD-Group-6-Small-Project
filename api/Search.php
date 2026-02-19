@@ -19,7 +19,7 @@
     $vaultnum = $inputs["vaultnum"]; 
     $userID = $inputs["userID"] ?? 0;
 
-    $conn = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331");
+    $conn = new mysqli("localhost", "", "", "");
     if($conn->connect_error){
         sendError($conn->connect_error);
     }else{
