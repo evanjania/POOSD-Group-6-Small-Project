@@ -35,7 +35,7 @@
     $vaultNumber = intval($inputs["vaultNumber"]);
 
     // DB connection
-    $connection = new mysqli("localhost", "VaultBook", "POOSD6", "COP4331");
+    $connection = new mysqli("localhost", "", "", "");
     if ($connection->connect_error)
     {
         sendError($connection->connect_error);
