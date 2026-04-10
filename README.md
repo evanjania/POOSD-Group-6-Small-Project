@@ -1,129 +1,140 @@
-# Ugotta - Recommendation Social Media / Tracking Application
+# VaultBook — Overseer's Contact Directory
 
-**ugotta.space** is a full-stack social recommendation tracker and diary for movies, TV shows, and music. Users can log and revisit their favorite recommendations, connect with friends, and share picks directly through in-app messaging — all in one place.
-
----
-
-## Team — POOSD Group 6
-
-| Name | Role | Contact |
-|---|---|---|
-| Evan Jania | PM / Front End | evanjania@gmail.com |
-| Logan Elkins | API | loganelkins0101@gmail.com |
-| Kevin Estrada | Database | kevinkevin2796@gmail.com |
-| Siddanth Rajan | Mobile | sid.rajan1323@gmail.com |
-| Erkan Altundal | API | erkankerem532@gmail.com |
-| Benjamin Quintero | Mobile | email |
+A Fallout-inspired contact management web application built on the LAMP stack. VaultBook allows authenticated users to manage a personal directory of vault dwellers (contacts) through a terminal-style interface inspired by the Fallout series.
 
 ---
 
-## Overview
+## Team
 
-ugotta.space is a MERN stack web application that combines a personal recommendation diary with a social layer. Users maintain a private, organized diary of movie, TV, and music recommendations while also being able to connect with friends, open direct chats, and exchange recommendations seamlessly.
+| Team Member     | Project Role      | Contact                                        |
+|-----------------|-------------------|------------------------------------------------|
+| Evan Jania      | PM / Front End    | evanjania@gmail.com / 386-451-2488             |
+| Logan Elkins    | API               | loganelkins0101@gmail.com / 321-312-7314       |
+| Kevin Estrada   | Database          | kevinkevin2796@gmail.com / 407-953-6630        |
+| Siddanth Rajan  | Backend           | sid.rajan1323@gmail.com                        |
+| Erkan Altundal  | API / Front End   | erkankerem532@gmail.com                        |
+
+---
+
+## Description
+
+VaultBook is a full-stack web application themed around the Fallout universe. After registering and logging in, users are taken to the **Overseer's Directory** — a dashboard where they can manage their personal list of contacts (vault dwellers). Each contact is assigned a vault number and can be searched, edited, or deleted at any time.
 
 ---
 
 ## Features
 
-### Authentication & Account Management
-- Secure sign-up and login with email verification before account activation
-- Password reset flow for forgotten credentials
-- Protected routes — dashboard and all features require authentication
-
-### Recommendation Diary
-- Personal diary organized into three categories: **Movies**, **TV Shows**, and **Music**
-- Add new recommendations to any category at any time
-- Browse and reference your full recommendation history from the dashboard
-
-### Friends & Social
-- Search and add friends using their registered username
-- Friends list management from the dashboard
-- Open direct chats with any friend
-- Send recommendations directly through chat
-- Receive a friend's recommendation and add it straight to your own diary
+- **User Registration & Login** — Create an account with first name, last name, username, and password. Log in with username and password.
+- **Add Contacts** — Add new contacts to your vault directory with required fields.
+- **View Contacts** — Browse your full contact list from the dashboard.
+- **Edit Contacts** — Update the details of any existing contact.
+- **Delete Contacts** — Remove contacts from your directory.
+- **Search** — Search contacts by name or vault number.
+- **Logout** — Securely log out and be redirected to the login page.
 
 ---
 
-## Tech Stack
+## Technologies Used
 
-| Layer | Technology |
-|---|---|
-| Frontend | React |
-| Backend | Node.js, Express |
-| Database | MongoDB |
-| Runtime | Node.js |
+- **Linux** — Server operating system
+- **Apache** — Web server
+- **MySQL** — Relational database for users and contacts
+- **PHP** — Server-side API endpoints
+- **HTML / CSS / JavaScript** — Frontend interface
+- **Tailwind CSS** — Utility-first CSS framework for styling
+- **GitHub** - Version control, development workflow and code review for the team
+- **Discord** - Communication, team meetings, and document sharing
+- **SwaggerHub** - API Documentation
+- **Postman** - API testing
+- **FileZilla** - Organization, downloading, and deleting files within the server.
 
 ---
 
 ## Project Structure
 
 ```
-ugotta.space/
-├── client/          # React frontend
-│   ├── public/
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       └── App.js
-├── server/          # Node.js / Express backend
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   └── index.js
-├── .env             # Environment variables (not committed)
-├── .gitignore
-├── LICENSE
-└── README.md
+vaultbook/
+├── api/                  # PHP backend API endpoints
+│   ├── Login.php
+│   ├── Signup.php
+│   └── (other endpoints)
+├── public/               # Frontend files served by Apache
+│   ├── index.html        # Login / Register page
+│   ├── dashboard.html    # Overseer's Directory
+│   ├── css/
+│   └── js/
+├── README.md
+├── LICENSE.md
+└── .gitignore
 ```
 
 ---
 
-## Environment Variables
+## Setup Instructions
 
-A `.env` file is required in the project root. It is not committed to version control. Required variables include:
+### Prerequisites
+- A Linux server with Apache, MySQL, and PHP installed (LAMP stack)
+- Git installed on your local machine
 
+### 1. Clone the Repository
+```bash
+git https://github.com/evanjania/POOSD-Group-6-Small-Project
+cd vaultbook
 ```
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-EMAIL_SERVICE=your_email_provider
-EMAIL_USER=your_email_address
-EMAIL_PASS=your_email_password
-PORT=5000
+
+### 2. Database Setup
+Log into MySQL and create the database and tables:
+```bash
+mysql -u root -p
+```
+Create a `COP4331` database with a `Users` table and a `Contacts` table. The `Users` table should include: `ID`, `FirstName`, `LastName`, `Login`, `Password`, and `DateCreated`. The `Contacts` table should include: `ID`, `FirstName`, `LastName`, `Phone`, `Email`, `UserID`, `DateCreated`, and `VaultNumber`.
+
+Create a MySQL user with access to the database and note the credentials for the next step.
+
+### 3. Configure API Credentials
+In each PHP file inside `api/`, update the database connection line with your credentials:
+```php
+$connection = new mysqli("localhost", "YOUR_DB_USER", "YOUR_DB_PASSWORD", "COP4331");
+```
+
+### 4. Deploy to Server
+Copy frontend files to your Apache web root:
+```bash
+cp -r public/* /var/www/html/
+```
+Copy API files to the LAMPAPI directory:
+```bash
+cp -r api/* /var/www/html/LAMPAPI/
+```
+
+### 5. Set Permissions
+```bash
+chmod -R 644 /var/www/html/
 ```
 
 ---
 
 ## Accessing the Application
 
-Once deployed, open a browser and navigate to:
-
+Once deployed, open a browser and navigate to your server's IP address or domain:
 ```
-https://ugotta.space/
+https://vaultbook.org/
 ```
-
-- Register a new account on the login/signup page and verify your email
-- Log in to access your personal recommendation dashboard
-- Add, browse, and manage your movie, TV, and music recommendations
-- Connect with friends, open chats, and share recommendations
+- Register a new account on the login page
+- Log in to access the Overseer's Directory dashboard
+- Add, view, edit, search, and delete contacts from the dashboard
 
 ---
 
 ## Assumptions & Limitations
 
-- This is a course project and is **not intended for production use** in its current state. Security hardening should be applied before any real-world deployment.
-- Email verification is implemented for account creation, but the email service configuration depends on the environment variables being correctly set.
-- The friends and messaging system is designed for direct one-on-one chats; group messaging is not supported.
-- The application is optimized for desktop browsers; mobile responsiveness may be limited.
-- Recommendation entries are user-generated and rely on manually entered data — there is no external API validation of movie, TV, or music titles.
+- Passwords are stored in plain text. This is a course project and is **not intended for production use**. Password hashing should be implemented before any real-world deployment.
+- The application is designed for a single-user-per-account contact list — contacts are linked to the logged-in user's ID.
+- The app is optimized for desktop browsers.
+- The vault numbers assigned to contacts are random and unrelated to the inputted information.
 
 ---
 
 ## AI Usage
 
 This project was developed with assistance from Claude (Anthropic) and ChatGPT (OpenAI) for code review, debugging, and documentation, in accordance with class policy.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
