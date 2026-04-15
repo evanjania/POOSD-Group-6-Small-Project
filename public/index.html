@@ -203,6 +203,12 @@
                                         placeholder="********"
                                         required
                                     />
+									<button
+										type="button"
+										onclick="togglePasswordVisibility('loginPassword', this)"
+										class="text-primary/50 hover:text-primary transition-colors text-sm tracking-wider font-bold uppercase shrink-0"
+										title="Toggle password visibility"
+									>[SHOW]</button>
                                 </div>
                             </div>
                         </div>
@@ -286,6 +292,12 @@
                                         class="bg-transparent border-none outline-none w-full text-xl placeholder:text-primary/30 focus:ring-0 font-normal"
                                         placeholder="********"
                                     />
+									<button
+										type="button"
+										onclick="togglePasswordVisibility('signupPassword', this)"
+										class="text-primary/50 hover:text-primary transition-colors text-sm tracking-wider font-bold uppercase shrink-0"
+										title="Toggle password visibility"
+									>[SHOW]</button>
                                 </div>
                             </div>
                         </div>
@@ -547,6 +559,19 @@
                     }
                 });
 	    updateUI();
+
+			function togglePasswordVisibility(inputId, btn) {
+				const input = document.getElementById(inputId);
+				if (input.type === "password") {
+					input.type = "text";
+					btn.textContent = "[HIDE]";
+					btn.classList.add("text-glow");
+				} else {
+					input.type = "password"
+					btn.textContent = "[SHOW]";
+					btn.classList.remove("text-glow");
+				}
+			}	
         </script>
     </body>
 </html>
